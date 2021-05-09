@@ -2,11 +2,11 @@ using System;
 
 namespace StoreUI
 {
-    public class ProfileMenu : IMenu
+    public class LocationMenu : IMenu
     {
         public void Start()
         {
-            Console.WriteLine("Not Implemented Yet");
+            Console.WriteLine("Not Yet Implemented");
         }
     }
 }

@@ -17,6 +17,12 @@ namespace StoreUI
 
                 case "admin":
                     return new AdminMenu();
+                
+                case "location":
+                    return new LocationMenu();
+
+                case "product":
+                    return new ProductMenu();
 
                 default:
                     return null;

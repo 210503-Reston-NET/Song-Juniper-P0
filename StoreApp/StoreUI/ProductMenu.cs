@@ -2,7 +2,7 @@ using System;
 
 namespace StoreUI
 {
-    public class ProfileMenu : IMenu
+    public class ProductMenu : IMenu
     {
         public void Start()
         {

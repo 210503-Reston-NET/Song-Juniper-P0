@@ -4,7 +4,6 @@ namespace StoreUI
 {
     public class MainMenu : IMenu
     {
-        private IMenu submenu;
         public void Start()
         {
             bool repeat = true;
@@ -25,15 +24,15 @@ namespace StoreUI
                     break;
 
                     case "1":
-                        submenu = MenuFactory.GetMenu("browse");
+                        MenuFactory.GetMenu("browse").Start();
                     break;
                     
                     case "2":
-                        submenu = MenuFactory.GetMenu("profile");
+                        MenuFactory.GetMenu("profile").Start();
                     break;
                     
                     case "42":
-                        submenu = MenuFactory.GetMenu("admin");
+                        MenuFactory.GetMenu("admin").Start();
                     break;
                     
                     default:
