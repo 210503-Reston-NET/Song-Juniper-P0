@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace StoreModels
 {
     /// <summary>
@@ -7,8 +9,8 @@ namespace StoreModels
     {
         public Customer Customer { get; set; }
         public Location Location { get; set; }
+        public List<Item> LineItems { get; set; }
         public double Total { get; set; }
 
-        //TODO: add a property for the order items
     }
 }

@@ -16,7 +16,7 @@ namespace StoreUI
                     Console.WriteLine("Welcome to the admin menu");
                     Console.WriteLine("Please verify your admin identity");
                     string pw = Console.ReadLine();
-                    if(pw.ToLower() != "da")
+                    if(pw != "da")
                     {
                         Console.WriteLine("Access Denied");
                         break;

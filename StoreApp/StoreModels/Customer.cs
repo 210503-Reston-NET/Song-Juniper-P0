@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace StoreModels
 {
     /// <summary>
@@ -7,5 +9,8 @@ namespace StoreModels
     {
         public string Name { get; set; }
         //TODO: add more properties to identify the customer
+        public Order CurrentOrder { get; set; }
+
+        public List<Order> OrderHistory { get; set; }
     }
 }
