@@ -1,4 +1,6 @@
 using System;
+using StoreBL;
+using StoreDL;
 
 namespace StoreUI
 {
@@ -7,15 +9,32 @@ namespace StoreUI
         public void Start()
         {
             bool repeat = true;
+            bool login = false;
             do
             {
-                Console.WriteLine("Welcome to the Wild Side Story!");
-                Console.WriteLine("We specialize in sourdough supplies and products");
+                string input;
+                if(!login)
+                {
+                    Console.WriteLine("Welcome to the Wild Side Story!");
+                    Console.WriteLine("We specialize in sourdough supplies and products");
+                    Console.WriteLine("Have you shopped with us before? [y/n]");
+                    input = Console.ReadLine();
+                    if(input.ToLower() == "y")
+                    {
+                        login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please sign up before continuing");
+                        login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                    }
+                }
+
+                
                 Console.WriteLine("What would you like to do today?");
                 Console.WriteLine("[1] Browse Items");
-                Console.WriteLine("[2] See My Profile");
                 Console.WriteLine("[0] Exit");
-                string input = Console.ReadLine();
+                input = Console.ReadLine();
                 switch(input)
                 {
                     case "0":
@@ -25,10 +44,6 @@ namespace StoreUI
 
                     case "1":
                         MenuFactory.GetMenu("browse").Start();
-                    break;
-                    
-                    case "2":
-                        MenuFactory.GetMenu("profile").Start();
                     break;
                     
                     case "42":

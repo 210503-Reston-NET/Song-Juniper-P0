@@ -15,9 +15,6 @@ namespace StoreUI
                 case "browse":
                     return new BrowseMenu();
 
-                case "profile":
-                    return new ProfileMenu();
-
                 case "admin":
                     return new AdminMenu();
                 
