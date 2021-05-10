@@ -16,6 +16,8 @@ namespace StoreModels
             this.Category = cat;
         }
 
+        public Product(){ }
+
         public override string ToString()
         {
             return $"Name: {this.Name} \nDescription: {this.Description} \nPrice: {this.Price} \nCategory: {this.Category}";
