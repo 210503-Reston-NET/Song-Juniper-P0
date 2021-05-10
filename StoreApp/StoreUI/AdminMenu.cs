@@ -26,9 +26,9 @@ namespace StoreUI
 
                 Console.WriteLine("Welcome Admin");
                 Console.WriteLine("What would you like to do today?");
-                Console.WriteLine("[0] Go Back to the Main Menu");
                 Console.WriteLine("[1] Manage Locations");
                 Console.WriteLine("[2] Manage Products");
+                Console.WriteLine("[0] Go Back to the Main Menu");
 
                 string input = Console.ReadLine();
                 switch(input)

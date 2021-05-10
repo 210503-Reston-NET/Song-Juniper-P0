@@ -27,7 +27,7 @@ namespace StoreDL
 
         public Customer GetOneCustomer(string name)
         {
-            return GetAllCustomers().Where(loc => loc.Name == name).FirstOrDefault();
+            return GetAllCustomers().Where(cust => cust.Name == name).FirstOrDefault();
         }
 
         public Customer AddNewCustomer(Customer customer)

@@ -27,7 +27,7 @@ namespace StoreDL
 
         public Product GetOneProduct(string name)
         {
-            return GetAllProducts().Where(loc => loc.Name == name).FirstOrDefault();
+            return GetAllProducts().Where(prod => prod.Name == name).FirstOrDefault();
         }
 
         public Product AddNewProduct(Product customer)

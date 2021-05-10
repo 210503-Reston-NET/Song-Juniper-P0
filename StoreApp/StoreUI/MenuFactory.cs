@@ -22,7 +22,7 @@ namespace StoreUI
                     return new LocationMenu(new LocationBL(new LocationRepo()));
 
                 case "product":
-                    return new ProductMenu();
+                    return new ProductMenu(new ProductBL(new ProductRepo()));
                 
                 case "inventory":
                     return new InventoryMenu();
