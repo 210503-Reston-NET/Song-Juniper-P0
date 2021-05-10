@@ -74,7 +74,7 @@ namespace StoreUI
                 string desc = Console.ReadLine();
 
                 Console.WriteLine("Price: ");
-                double price = Double.Parse(Console.ReadLine());
+                string price = Console.ReadLine();
 
                 Console.WriteLine("Category: ");
                 string cat = Console.ReadLine();

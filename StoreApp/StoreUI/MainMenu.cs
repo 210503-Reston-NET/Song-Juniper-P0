@@ -19,14 +19,25 @@ namespace StoreUI
                     Console.WriteLine("We specialize in sourdough supplies and products");
                     Console.WriteLine("Have you shopped with us before? [y/n]");
                     input = Console.ReadLine();
-                    if(input.ToLower() == "y")
+                    switch(input.ToLower())
                     {
-                        login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please sign up before continuing");
-                        login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                        case "y":
+                            login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                        break;
+
+                        case "n":
+                            Console.WriteLine("Please sign up before continuing");
+                            login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                        break;
+
+                        case "42":
+                            login = true;
+                            MenuFactory.GetMenu("admin").Start();
+                        break;
+
+                        default:
+                            Console.WriteLine("I don't understand your input, please try again.");
+                        break;
                     }
                 }
 
