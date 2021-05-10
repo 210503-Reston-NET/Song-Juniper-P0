@@ -1,5 +1,6 @@
 using System;
 using StoreBL;
+using StoreDL;
 using StoreModels;
 
 namespace StoreUI
@@ -34,7 +35,7 @@ namespace StoreUI
                         case "1":
                         break;
                         case "2":
-                            MenuFactory.GetMenu("signup").Start();
+                            new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
                         break;
                         default:
                             Console.WriteLine("I don't understand your input, please try again.");
