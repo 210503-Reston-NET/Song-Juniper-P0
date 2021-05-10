@@ -64,7 +64,38 @@ namespace StoreUI
 
         public void AddNewProduct()
         {
+            try
+            {
+                Console.WriteLine("Enter details about the new product");
+                Console.WriteLine("Name: ");
+                string name = Console.ReadLine();
+                
+                Console.WriteLine("Description: ");
+                string desc = Console.ReadLine();
 
+                Console.WriteLine("Price: ");
+                double price = Double.Parse(Console.ReadLine());
+
+                Console.WriteLine("Category: ");
+                string cat = Console.ReadLine();
+
+                if(_productBL.FindProductByName(name) is null)
+                {
+                    Product newProd = new Product(name, desc, price, cat);
+                    _productBL.AddNewProduct(newProd);
+                    Console.WriteLine("Product added successfully");
+                    Console.WriteLine(newProd.ToString());
+
+                }
+                else
+                {
+                    Console.WriteLine("There is already a product with the same name");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

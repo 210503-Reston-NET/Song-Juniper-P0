@@ -67,12 +67,20 @@ namespace StoreUI
                 Console.WriteLine("Enter the address for the location");
                 address = Console.ReadLine();
                 
-                //create new location object and send it over to BL
-                Location newLoc = new Location(name, address);
-                _locBL.AddNewLocation(newLoc);
+                if(_locBL.FindLocationByName(name) is null)
+                {
+                    //create new location object and send it over to BL
+                    Location newLoc = new Location(name, address);
+                    _locBL.AddNewLocation(newLoc);
 
-                Console.WriteLine("Location Creation has been successful!");
-                Console.WriteLine(newLoc.ToString());
+                    Console.WriteLine("Location Creation has been successful!");
+                    Console.WriteLine(newLoc.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("There is already a product with the same name");
+                }
+                
             }
             catch (Exception ex)
             {
