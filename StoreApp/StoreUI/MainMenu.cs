@@ -9,8 +9,8 @@ namespace StoreUI
             bool repeat = true;
             do
             {
-                Console.WriteLine("Welcome to Our Store!");
-                Console.WriteLine("Some stuff about store here");
+                Console.WriteLine("Welcome to the Wild Side Story!");
+                Console.WriteLine("We specialize in sourdough supplies and products");
                 Console.WriteLine("What would you like to do today?");
                 Console.WriteLine("[1] Browse Items");
                 Console.WriteLine("[2] See My Profile");

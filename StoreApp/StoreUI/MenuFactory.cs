@@ -1,3 +1,6 @@
+using StoreBL;
+using StoreDL;
+
 namespace StoreUI
 {
     public class MenuFactory
@@ -19,10 +22,13 @@ namespace StoreUI
                     return new AdminMenu();
                 
                 case "location":
-                    return new LocationMenu();
+                    return new LocationMenu(new LocationBL(new LocationRepo()));
 
                 case "product":
                     return new ProductMenu();
+                
+                case "inventory":
+                    return new InventoryMenu();
 
                 default:
                     return null;
