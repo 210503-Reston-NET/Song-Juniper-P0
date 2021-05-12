@@ -5,10 +5,10 @@ namespace StoreModels
     {
         public string Name { get; set; }
         public string Description {get; set; }
-        public string Price { get; set; }
+        public double Price { get; set; }
         public string Category { get; set; }
 
-        public Product(string name, string desc, string price, string cat)
+        public Product(string name, string desc, double price, string cat)
         {
             this.Name = name;
             this.Description = desc;

@@ -36,6 +36,7 @@ namespace StoreUI
                     if(parsedInput >= 0 || parsedInput < allLocations.Count)
                     {
                         _currentLocation = allLocations[parsedInput];
+                        Console.WriteLine($"You picked {_currentLocation.ToString()}");
                     }
                     else
                     {
@@ -94,6 +95,4 @@ namespace StoreUI
             
         }
     }
-
-
 }
