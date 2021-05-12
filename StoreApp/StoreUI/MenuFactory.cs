@@ -13,7 +13,7 @@ namespace StoreUI
                     return new MainMenu();
 
                 case "browse":
-                    return new BrowseMenu();
+                    return new BrowseMenu(new LocationBL(new LocationRepo()), new ProductBL(new ProductRepo()));
 
                 case "admin":
                     return new AdminMenu();

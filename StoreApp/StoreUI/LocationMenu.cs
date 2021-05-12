@@ -67,6 +67,7 @@ namespace StoreUI
                 Console.WriteLine("Enter the address for the location");
                 address = Console.ReadLine();
                 
+                //Todo: get this outta UI logic
                 if(_locBL.FindLocationByName(name) is null)
                 {
                     //create new location object and send it over to BL

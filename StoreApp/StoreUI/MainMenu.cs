@@ -6,14 +6,19 @@ namespace StoreUI
 {
     public class MainMenu : IMenu
     {
+        private bool _login;
+
+        public MainMenu()
+        {
+            _login = false;
+        }
         public void Start()
         {
             bool repeat = true;
-            bool login = false;
             do
             {
                 string input;
-                if(!login)
+                if(!_login)
                 {
                     Console.WriteLine("Welcome to the Wild Side Story!");
                     Console.WriteLine("We specialize in sourdough supplies and products");
@@ -22,16 +27,16 @@ namespace StoreUI
                     switch(input.ToLower())
                     {
                         case "y":
-                            login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                            _login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
                         break;
 
                         case "n":
                             Console.WriteLine("Please sign up before continuing");
-                            login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                            _login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
                         break;
 
                         case "42":
-                            login = true;
+                            _login = true;
                             MenuFactory.GetMenu("admin").Start();
                         break;
 
