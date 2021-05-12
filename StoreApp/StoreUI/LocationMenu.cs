@@ -78,7 +78,7 @@ namespace StoreUI
                 }
                 else
                 {
-                    Console.WriteLine("There is already a product with the same name");
+                    Console.WriteLine("There is already a location with the same name");
                 }
                 
             }
