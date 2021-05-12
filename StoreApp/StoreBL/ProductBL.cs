@@ -15,6 +15,10 @@ namespace StoreBL
 
         public Product AddNewProduct(Product prod)
         {
+            if(FindProductByName(prod.Name) is not null)
+                {
+                    throw new Exception("There is already a product with the same name");
+                }
             return _repo.AddNewProduct(prod);
         }
 

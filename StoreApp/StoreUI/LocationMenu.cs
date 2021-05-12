@@ -59,28 +59,18 @@ namespace StoreUI
 
         public void AddNewLocation()
         {
+            //gather information about the new location
+            Console.WriteLine("Please enter the details of the new location");
+            string name = _validationService.ValidateString("Enter a unique name for the location");
+            string address = _validationService.ValidateString("Enter the address for the location");
+            
             try
             {
-                //gather information about the new location
-                Console.WriteLine("Please enter the details of the new location");
-                string name = _validationService.ValidateString("Enter a unique name for the location");
-                string address = _validationService.ValidateString("Enter the address for the location");
-                
-                //Todo: get this outta UI logic
-                if(_locBL.FindLocationByName(name) is null)
-                {
-                    //create new location object and send it over to BL
-                    Location newLoc = new Location(name, address);
-                    _locBL.AddNewLocation(newLoc);
-
-                    Console.WriteLine("Location Creation has been successful!");
-                    Console.WriteLine(newLoc.ToString());
-                }
-                else
-                {
-                    Console.WriteLine("There is already a location with the same name");
-                }
-                
+                //create new location object and send it over to BL
+                Location newLoc = new Location(name, address);
+                Location createdLoc = _locBL.AddNewLocation(newLoc);
+                Console.WriteLine("Location Creation has been successful!");
+                Console.WriteLine(createdLoc.ToString());
             }
             catch (Exception ex)
             {

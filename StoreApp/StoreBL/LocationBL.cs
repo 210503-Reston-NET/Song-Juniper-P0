@@ -15,6 +15,10 @@ namespace StoreBL
 
         public Location AddNewLocation(Location newLoc)
         {
+            if(FindLocationByName(newLoc.Name) is not null)
+            {
+                throw new Exception("There is already a location with the same name");
+            }
             return _repo.AddNewLocation(newLoc);
         }
 

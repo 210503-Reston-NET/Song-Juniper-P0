@@ -15,6 +15,10 @@ namespace StoreBL
 
         public Customer AddNewCustomer(Customer customer)
         {
+            if(FindCustomerByName(customer.Name) is not null)
+            {
+                throw new Exception("This user already exists in the system.");
+            }
             return _repo.AddNewCustomer(customer);
         }
 

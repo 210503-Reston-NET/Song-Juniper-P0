@@ -25,24 +25,15 @@ namespace StoreUI
         {
             try
             {
-                if (_customerBL.FindCustomerByName(name) is null) 
-                {
-                    Customer newCustomer = new Customer(name);
-                    _customerBL.AddNewCustomer(newCustomer);
-                    Console.WriteLine("Sign up successful!");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("User already exists");
-                    Console.WriteLine("Please Login instead");
-                    return new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
-                }
+                Customer newCustomer = new Customer(name);
+                _customerBL.AddNewCustomer(newCustomer);
+                Console.WriteLine("Sign up successful!");
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                return new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
             }
         }
     }

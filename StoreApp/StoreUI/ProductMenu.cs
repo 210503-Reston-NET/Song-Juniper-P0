@@ -66,26 +66,18 @@ namespace StoreUI
 
         public void AddNewProduct()
         {
-            try
-            {
                 Console.WriteLine("Enter details about the new product");
                 string name = _validationService.ValidateString("Name: ");
                 string desc = _validationService.ValidateString("Description: ");
                 double price = _validationService.ValidateDouble("Price: ");
                 string category = _validationService.ValidateString("Category: ");
 
-                if(_productBL.FindProductByName(name) is null)
-                {
-                    Product newProd = new Product(name, desc, price, category);
-                    _productBL.AddNewProduct(newProd);
-                    Console.WriteLine("Product added successfully");
-                    Console.WriteLine(newProd.ToString());
-
-                }
-                else
-                {
-                    Console.WriteLine("There is already a product with the same name");
-                }
+            try
+            {
+                Product newProd = new Product(name, desc, price, category);
+                Product createdProd = _productBL.AddNewProduct(newProd);
+                Console.WriteLine("Product added successfully");
+                Console.WriteLine(createdProd.ToString());
             }
             catch (Exception ex)
             {
