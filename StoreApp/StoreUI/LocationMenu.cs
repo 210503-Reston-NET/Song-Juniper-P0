@@ -8,10 +8,12 @@ namespace StoreUI
     public class LocationMenu : IMenu
     {
         private LocationBL _locBL;
+        private ValidationService _validationService;
 
-        public LocationMenu(LocationBL locationBL)
+        public LocationMenu(LocationBL locationBL, ValidationService validationService)
         {
             _locBL = locationBL;
+            _validationService = validationService;
         }
         public void Start()
         {
@@ -60,12 +62,9 @@ namespace StoreUI
             try
             {
                 //gather information about the new location
-                string name, address;
                 Console.WriteLine("Please enter the details of the new location");
-                Console.WriteLine("Enter a unique name for the location");
-                name = Console.ReadLine();
-                Console.WriteLine("Enter the address for the location");
-                address = Console.ReadLine();
+                string name = _validationService.ValidateString("Enter a unique name for the location");
+                string address = _validationService.ValidateString("Enter the address for the location");
                 
                 //Todo: get this outta UI logic
                 if(_locBL.FindLocationByName(name) is null)

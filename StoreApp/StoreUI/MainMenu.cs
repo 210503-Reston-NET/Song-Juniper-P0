@@ -32,7 +32,7 @@ namespace StoreUI
 
                         case "n":
                             Console.WriteLine("Please sign up before continuing");
-                            _login = new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                            _login = new SignupMenu(new CustomerBL(new CustomerRepo()), new ValidationService()).Start();
                         break;
 
                         case "42":

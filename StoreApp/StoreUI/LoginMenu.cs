@@ -35,7 +35,7 @@ namespace StoreUI
                         case "1":
                         break;
                         case "2":
-                            new SignupMenu(new CustomerBL(new CustomerRepo())).Start();
+                            new SignupMenu(new CustomerBL(new CustomerRepo()), new ValidationService()).Start();
                         break;
                         default:
                             Console.WriteLine("I don't understand your input, please try again.");

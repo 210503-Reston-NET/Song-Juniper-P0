@@ -8,9 +8,11 @@ namespace StoreUI
     public class ProductMenu : IMenu
     {
         private ProductBL _productBL;
-        public ProductMenu(ProductBL productBL)
+        private ValidationService _validationService;
+        public ProductMenu(ProductBL productBL, ValidationService validationService)
         {
             _productBL = productBL;
+            _validationService = validationService;
         }
         public void Start()
         {
@@ -67,21 +69,14 @@ namespace StoreUI
             try
             {
                 Console.WriteLine("Enter details about the new product");
-                Console.WriteLine("Name: ");
-                string name = Console.ReadLine();
-                
-                Console.WriteLine("Description: ");
-                string desc = Console.ReadLine();
-
-                Console.WriteLine("Price: ");
-                double price = Double.Parse(Console.ReadLine());
-
-                Console.WriteLine("Category: ");
-                string cat = Console.ReadLine();
+                string name = _validationService.ValidateString("Name: ");
+                string desc = _validationService.ValidateString("Description: ");
+                double price = _validationService.ValidateDouble("Price: ");
+                string category = _validationService.ValidateString("Category: ");
 
                 if(_productBL.FindProductByName(name) is null)
                 {
-                    Product newProd = new Product(name, desc, price, cat);
+                    Product newProd = new Product(name, desc, price, category);
                     _productBL.AddNewProduct(newProd);
                     Console.WriteLine("Product added successfully");
                     Console.WriteLine(newProd.ToString());

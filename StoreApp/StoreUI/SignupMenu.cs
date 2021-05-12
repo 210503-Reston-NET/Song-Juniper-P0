@@ -8,16 +8,16 @@ namespace StoreUI
     public class SignupMenu
     {
         private CustomerBL _customerBL;
+        private ValidationService _validationService;
 
-        public SignupMenu(CustomerBL customerBL)
+        public SignupMenu(CustomerBL customerBL, ValidationService validationService)
         {
             _customerBL = customerBL;
+            _validationService = validationService;
         }
         public bool Start()
         {
-            Console.WriteLine("Please enter your name:");
-            string name = Console.ReadLine();
-
+            string name =_validationService.ValidateString("Please enter your name:");
             return CreateNewCustomer(name);
         }
 
