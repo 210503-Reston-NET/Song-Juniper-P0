@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Serilog;
 using StoreBL;
 using StoreModels;
 
@@ -66,22 +67,24 @@ namespace StoreUI
 
         public void AddNewProduct()
         {
-                Console.WriteLine("Enter details about the new product");
-                string name = _validationService.ValidateString("Name: ");
-                string desc = _validationService.ValidateString("Description: ");
-                double price = _validationService.ValidateDouble("Price: ");
-                string category = _validationService.ValidateString("Category: ");
-
-            try
+            Console.WriteLine("Enter details about the new product");
+            string name = _validationService.ValidateString("Name: ");
+            string desc = _validationService.ValidateString("Description: ");
+            double price = _validationService.ValidateDouble("Price: ");
+            string category = _validationService.ValidateString("Category: ");
+            using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
             {
-                Product newProd = new Product(name, desc, price, category);
-                Product createdProd = _productBL.AddNewProduct(newProd);
-                Console.WriteLine("Product added successfully");
-                Console.WriteLine(createdProd.ToString());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    Product newProd = new Product(name, desc, price, category);
+                    Product createdProd = _productBL.AddNewProduct(newProd);
+                    Console.WriteLine("Product added successfully");
+                    Console.WriteLine(createdProd.ToString());
+                }
+                catch (Exception ex)
+                {
+                    log.Warning(ex, ex.Message);
+                }
             }
         }
     }

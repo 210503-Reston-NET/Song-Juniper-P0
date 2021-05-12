@@ -2,6 +2,7 @@ using System;
 using StoreBL;
 using StoreDL;
 using StoreModels;
+using Serilog;
 
 namespace StoreUI
 {
@@ -23,17 +24,20 @@ namespace StoreUI
 
         public bool CreateNewCustomer(string name)
         {
-            try
+            using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
             {
-                Customer newCustomer = new Customer(name);
-                _customerBL.AddNewCustomer(newCustomer);
-                Console.WriteLine("Sign up successful!");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                try
+                {
+                    Customer newCustomer = new Customer(name);
+                    _customerBL.AddNewCustomer(newCustomer);
+                    Console.WriteLine("Sign up successful!");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    log.Warning(ex, ex.Message);
+                    return new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                }
             }
         }
     }

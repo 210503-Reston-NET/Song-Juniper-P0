@@ -2,6 +2,7 @@ using System;
 using StoreModels;
 using StoreBL;
 using System.Collections.Generic;
+using Serilog;
 
 namespace StoreUI
 {
@@ -64,17 +65,20 @@ namespace StoreUI
             string name = _validationService.ValidateString("Enter a unique name for the location");
             string address = _validationService.ValidateString("Enter the address for the location");
             
-            try
+            using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
             {
-                //create new location object and send it over to BL
-                Location newLoc = new Location(name, address);
-                Location createdLoc = _locBL.AddNewLocation(newLoc);
-                Console.WriteLine("Location Creation has been successful!");
-                Console.WriteLine(createdLoc.ToString());
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    //create new location object and send it over to BL
+                    Location newLoc = new Location(name, address);
+                    Location createdLoc = _locBL.AddNewLocation(newLoc);
+                    Console.WriteLine("Location Creation has been successful!");
+                    Console.WriteLine(createdLoc.ToString());
+                }
+                catch (Exception ex)
+                {
+                    log.Warning(ex.Message);
+                }
             }
         }
 
