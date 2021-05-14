@@ -7,11 +7,19 @@ namespace StoreModels
     /// </summary>
     public class Location
     {   
+        public Location() {}
         public Location(string name, string address)
         {
             this.Name = name;
             this.Address = address;
         }
+        
+        public Location(int id, string name, string address) : this(name, address)
+        {
+            this.Id = id;
+        }
+
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
 

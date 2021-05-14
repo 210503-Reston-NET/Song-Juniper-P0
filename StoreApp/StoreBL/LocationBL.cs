@@ -7,8 +7,8 @@ namespace StoreBL
 {
     public class LocationBL
     {
-        private LocationRepo _repo;
-        public LocationBL(LocationRepo repo)
+        private LocationRepoDB _repo;
+        public LocationBL(LocationRepoDB repo)
         {
             _repo = repo;
         }
@@ -22,10 +22,10 @@ namespace StoreBL
             return _repo.AddNewLocation(newLoc);
         }
 
-        public void RemoveLocation(Location location)
-        {
-            _repo.RemoveLocation(location);
-        }
+        // public void RemoveLocation(Location location)
+        // {
+        //     _repo.RemoveLocation(location);
+        // }
         public List<Location> GetAllLocations()
         {
             return _repo.GetAllLocations();
@@ -33,7 +33,12 @@ namespace StoreBL
 
         public Location FindLocationByName(string name)
         {
-            return _repo.GetOneLocation(name);
+            return _repo.GetLocationByName(name);
+        }
+
+        public Location FindLocationByID(int id)
+        {
+            return _repo.GetLocationById(id);
         }
     }
 }

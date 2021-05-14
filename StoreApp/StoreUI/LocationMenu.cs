@@ -98,26 +98,26 @@ namespace StoreUI
             }
         }
 
-        public void RemoveLocation()
-        {
-            try
-            {
-                Console.WriteLine("What is the name of the location you wish to remove?");
-                string name = Console.ReadLine();
-                Location loc = _locBL.FindLocationByName(name);
-                Console.WriteLine("Is this the location you're looking to remove? [Y/N]");
-                Console.WriteLine(loc.ToString());
-                string input = Console.ReadLine();
-                if(input == "y" | input == "Y")
-                {
-                    _locBL.RemoveLocation(loc);
-                    Console.WriteLine("Successfully Removed!");
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
+        // public void RemoveLocation()
+        // {
+        //     try
+        //     {
+        //         Console.WriteLine("What is the name of the location you wish to remove?");
+        //         string name = Console.ReadLine();
+        //         Location loc = _locBL.FindLocationByName(name);
+        //         Console.WriteLine("Is this the location you're looking to remove? [Y/N]");
+        //         Console.WriteLine(loc.ToString());
+        //         string input = Console.ReadLine();
+        //         if(input == "y" | input == "Y")
+        //         {
+        //             _locBL.RemoveLocation(loc);
+        //             Console.WriteLine("Successfully Removed!");
+        //         }
+        //     }
+        //     catch(Exception ex)
+        //     {
+        //         Console.WriteLine(ex.Message);
+        //     }
+        // }
     }
 }

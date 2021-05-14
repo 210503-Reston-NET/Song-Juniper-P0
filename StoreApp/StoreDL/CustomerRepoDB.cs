@@ -43,7 +43,7 @@ namespace StoreDL
             return ConvertToModel(newCust);
         }
 
-        private Entity.Customer ConvertToEntity(Model.Customer customer)
+        private static Entity.Customer ConvertToEntity(Model.Customer customer)
         {
             if(customer is not null)
             {
@@ -60,7 +60,7 @@ namespace StoreDL
             else return null;
         }
 
-        private Model.Customer ConvertToModel(Entity.Customer customer)
+        private static Model.Customer ConvertToModel(Entity.Customer customer)
         {
             if(customer is not null)
             {

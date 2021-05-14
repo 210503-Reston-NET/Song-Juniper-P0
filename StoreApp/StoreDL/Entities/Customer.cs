@@ -14,7 +14,6 @@ namespace StoreDL.Entities
 
         public int Id { get; set; }
         public string CustName { get; set; }
-
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
