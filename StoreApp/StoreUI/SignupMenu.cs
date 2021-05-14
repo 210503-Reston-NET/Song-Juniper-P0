@@ -6,7 +6,7 @@ using Serilog;
 
 namespace StoreUI
 {
-    public class SignupMenu
+    public class SignupMenu : IAuthMenu
     {
         private CustomerBL _customerBL;
         private ValidationService _validationService;
@@ -36,7 +36,7 @@ namespace StoreUI
                 catch (Exception ex)
                 {
                     log.Warning(ex, ex.Message);
-                    return new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                    return AuthMenuFactory.GetMenu("login").Start();
                 }
             }
         }

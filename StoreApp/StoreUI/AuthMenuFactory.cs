@@ -7,9 +7,9 @@ using StoreDL.Entities;
 
 namespace StoreUI
 {
-    public class MenuFactory
+    public class AuthMenuFactory
     {
-        public static IMenu GetMenu(string menuType)
+        public static IAuthMenu GetMenu(string menuType)
         {
             //getting configurations from a config file
             var configuration = new ConfigurationBuilder()
@@ -29,23 +29,11 @@ namespace StoreUI
 
             switch (menuType.ToLower())
             {
-                case "main":
-                    return new MainMenu();
+                case "login":
+                    return new LoginMenu(new CustomerBL(new CustomerRepoDB(context)));
 
-                case "browse":
-                    return new BrowseMenu(new LocationBL(new LocationRepo()), new ProductBL(new ProductRepo()));
-
-                case "admin":
-                    return new AdminMenu();
-                
-                case "location":
-                    return new LocationMenu(new LocationBL(new LocationRepo()), new ValidationService());
-
-                case "product":
-                    return new ProductMenu(new ProductBL(new ProductRepo()), new ValidationService());
-                
-                case "inventory":
-                    return new InventoryMenu();
+                case "signup":
+                    return new SignupMenu(new CustomerBL(new CustomerRepoDB(context)), new ValidationService());
 
                 default:
                     return null;

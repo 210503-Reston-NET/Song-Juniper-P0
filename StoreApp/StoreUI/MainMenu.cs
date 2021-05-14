@@ -27,12 +27,12 @@ namespace StoreUI
                     switch(input.ToLower())
                     {
                         case "y":
-                            _login = new LoginMenu(new CustomerBL(new CustomerRepo())).Start();
+                            _login = AuthMenuFactory.GetMenu("login").Start();
                         break;
 
                         case "n":
                             Console.WriteLine("Please sign up before continuing");
-                            _login = new SignupMenu(new CustomerBL(new CustomerRepo()), new ValidationService()).Start();
+                            _login = AuthMenuFactory.GetMenu("signup").Start();
                         break;
 
                         case "42":

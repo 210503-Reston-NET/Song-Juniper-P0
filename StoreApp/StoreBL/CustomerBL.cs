@@ -7,8 +7,8 @@ namespace StoreBL
 {
     public class CustomerBL
     {
-        private CustomerRepo _repo;
-        public CustomerBL(CustomerRepo repo)
+        private CustomerRepoDB _repo;
+        public CustomerBL(CustomerRepoDB repo)
         {
             _repo = repo;
         }
@@ -29,7 +29,12 @@ namespace StoreBL
 
         public Customer FindCustomerByName(string name)
         {
-            return _repo.GetOneCustomer(name);
+            return _repo.GetCustomerByName(name);
+        }
+
+        public Customer FindCustomerById(int id)
+        {
+            return _repo.GetCustomerById(id);
         }
     }
 }

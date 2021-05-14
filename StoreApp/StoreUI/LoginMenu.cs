@@ -5,7 +5,7 @@ using StoreModels;
 
 namespace StoreUI
 {
-    public class LoginMenu
+    public class LoginMenu : IAuthMenu
     {
         private CustomerBL _customerBL;
 
@@ -35,7 +35,7 @@ namespace StoreUI
                         case "1":
                         break;
                         case "2":
-                            new SignupMenu(new CustomerBL(new CustomerRepo()), new ValidationService()).Start();
+                            AuthMenuFactory.GetMenu("signup").Start();
                         break;
                         default:
                             Console.WriteLine("I don't understand your input, please try again.");
