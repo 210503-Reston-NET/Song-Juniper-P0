@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace StoreDL.Entities
+namespace StoreUI.Entities
 {
     public partial class Product
     {
@@ -17,7 +17,6 @@ namespace StoreDL.Entities
         public string ProdName { get; set; }
         public string ProdDesc { get; set; }
         public double Price { get; set; }
-
         public string Category { get; set; }
 
         public virtual ICollection<Inventory> Inventories { get; set; }

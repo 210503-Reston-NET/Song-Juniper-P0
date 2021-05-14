@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace StoreUI.Entities
+{
+    public partial class Customer
+    {
+        public Customer()
+        {
+            Orders = new HashSet<Order>();
+        }
+
+        public int Id { get; set; }
+        public string CustName { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
+    }
+}

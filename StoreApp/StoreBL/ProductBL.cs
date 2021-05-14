@@ -7,8 +7,8 @@ namespace StoreBL
 {
     public class ProductBL
     {
-        private ProductRepo _repo;
-        public ProductBL(ProductRepo repo)
+        private ProductRepoDB _repo;
+        public ProductBL(ProductRepoDB repo)
         {
             _repo = repo;
         }
@@ -29,7 +29,12 @@ namespace StoreBL
 
         public Product FindProductByName(string name)
         {
-            return _repo.GetOneProduct(name);
+            return _repo.GetProductByName(name);
+        }
+
+        public Product FindProductById(int id)
+        {
+            return _repo.GetProductById(id);
         }
     }
 }
