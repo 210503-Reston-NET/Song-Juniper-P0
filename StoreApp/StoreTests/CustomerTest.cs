@@ -24,6 +24,7 @@ namespace StoreTests
         [InlineData("328")]
         [InlineData("")]
         [InlineData("@#!!!")]
+        [InlineData("Aur!yn0")]
         public void NameShouldNotSetInvalidData(string input)
         {
             Customer test = new Customer();
