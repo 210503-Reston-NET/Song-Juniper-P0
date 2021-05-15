@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace StoreModels
 {
@@ -7,6 +9,7 @@ namespace StoreModels
     /// </summary>
     public class Customer
     {
+        private string _name;
         public Customer() {}
         public Customer (string name)
         {
@@ -17,7 +20,22 @@ namespace StoreModels
         {
             this.Id = id;
         }
-        public string Name { get; set; }
+        public string Name 
+        {
+            get { return _name; }
+            set 
+            {
+                if(value.Length == 0)
+                {
+                    throw new Exception("Name cannot be empty");
+                }
+                if(!Regex.IsMatch(value, "[A-Za-z .-]+"))
+                {
+                    throw new Exception("Name cannot have numbers");
+                }
+                _name = value;
+            } 
+        }
 
         public int Id { get; set; }
 
