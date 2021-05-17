@@ -50,9 +50,9 @@ namespace StoreBL
             return _repo.AddInventory(inventory);
         }
 
-        public void UpdateInventoryItem(int prodId, int locId, int quantity)
+        public Inventory UpdateInventoryItem(Inventory inventory)
         {
-
+            return _repo.UpdateInventoryItem(inventory);
         }
     }
 }

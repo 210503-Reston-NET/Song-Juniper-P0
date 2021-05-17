@@ -78,8 +78,9 @@ namespace StoreUI
                     input = Console.ReadLine();
                     parsedInput = Int32.Parse(input) - 1;
                     if(input == "0") repeat = false;
-                    else if(parsedInput > 0 && parsedInput <= inventory.Count)
+                    else if(parsedInput >= 0 && parsedInput < inventory.Count)
                     {
+                        Console.WriteLine($"We got here {parsedInput}, {inventory[parsedInput].ToString()}");
                         ChangeInventory(inventory[parsedInput]);
                     }
                     else if(parsedInput == inventory.Count)
@@ -125,9 +126,12 @@ namespace StoreUI
 
         }
 
-        private void ChangeInventory(Inventory item)
+        private Inventory ChangeInventory(Inventory item)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Enter new quantity: ");
+            string input = Console.ReadLine();
+            item.Quantity = Int32.Parse(input);
+            return _locBL.UpdateInventoryItem(item);
         }
 
         private List<Location> GetAllLocations()

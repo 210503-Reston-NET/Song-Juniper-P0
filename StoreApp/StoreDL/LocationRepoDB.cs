@@ -46,8 +46,10 @@ namespace StoreDL
             return _context.Inventories.Where(inventory => inventory.StoreId == locationId).Select(
                 inventory => new Model.Inventory
                 {
+                    Id = inventory.Id,
                     Product = ProductRepoDB.ConvertToModel(inventory.Prod),
-                    Quantity = inventory.Quantity
+                    Quantity = inventory.Quantity,
+                    Location = LocationRepoDB.ConvertToModel(inventory.Store),
                 }
             ).ToList();
 
@@ -56,7 +58,7 @@ namespace StoreDL
         public Model.Inventory AddInventory(Model.Inventory inventory)
         {
             _context.Inventories.Add(
-                new Entities.Inventory{
+                new Entity.Inventory{
                     StoreId = inventory.Location.Id,
                     ProdId = inventory.Product.Id,
                     Quantity = inventory.Quantity
@@ -66,10 +68,13 @@ namespace StoreDL
             return inventory;
         }
 
-        // public List<Model.Inventory> UpdateInventoryItem(Model.Inventory inventory)
-        // {
-            
-        // }
+        public Model.Inventory UpdateInventoryItem(Model.Inventory inventory)
+        {
+            Entity.Inventory toUpdate = _context.Inventories.FirstOrDefault(inven => inven.Id == inventory.Id);
+            toUpdate.Quantity = inventory.Quantity;
+            _context.SaveChanges();
+            return inventory;
+        }
         private static Entity.StoreFront ConvertToEntity(Model.Location location)
         {
             if(location is not null)
