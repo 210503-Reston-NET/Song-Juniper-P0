@@ -40,5 +40,19 @@ namespace StoreBL
         {
             return _repo.GetLocationById(id);
         }
+
+        public List<Inventory> GetLocationInventory(int id)
+        {
+            return _repo.GetLocationInventory(id);
+        }
+        public Inventory AddInventory(Inventory inventory)
+        {
+            return _repo.AddInventory(inventory);
+        }
+
+        public void UpdateInventoryItem(int prodId, int locId, int quantity)
+        {
+
+        }
     }
 }

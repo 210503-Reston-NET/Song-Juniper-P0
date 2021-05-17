@@ -45,7 +45,7 @@ namespace StoreUI
                     return new ProductMenu(new ProductBL(new ProductRepoDB(context)), new ValidationService());
                 
                 case "inventory":
-                    return new InventoryMenu();
+                    return new InventoryMenu(new LocationBL(new LocationRepoDB(context)), new ProductBL(new ProductRepoDB(context)));
 
                 default:
                     return null;

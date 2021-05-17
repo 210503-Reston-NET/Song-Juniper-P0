@@ -43,7 +43,7 @@ namespace StoreDL
             return ConvertToModel(prodToAdd);
         }
 
-        private static Entity.Product ConvertToEntity(Model.Product prod)
+        public static Entity.Product ConvertToEntity(Model.Product prod)
         {
             if(prod is not null)
             {
@@ -66,7 +66,7 @@ namespace StoreDL
             else return null;
         }
 
-        private static Model.Product ConvertToModel(Entity.Product product)
+        public static Model.Product ConvertToModel(Entity.Product product)
         {
             if(product is not null)
             {

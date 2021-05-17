@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Entity = StoreDL.Entities;
 using Model = StoreModels;
 
@@ -43,6 +41,35 @@ namespace StoreDL
             return ConvertToModel(locToAdd);
         }
 
+        public List<Model.Inventory> GetLocationInventory(int locationId)
+        {
+            return _context.Inventories.Where(inventory => inventory.StoreId == locationId).Select(
+                inventory => new Model.Inventory
+                {
+                    Product = ProductRepoDB.ConvertToModel(inventory.Prod),
+                    Quantity = inventory.Quantity
+                }
+            ).ToList();
+
+        }
+
+        public Model.Inventory AddInventory(Model.Inventory inventory)
+        {
+            _context.Inventories.Add(
+                new Entities.Inventory{
+                    StoreId = inventory.Location.Id,
+                    ProdId = inventory.Product.Id,
+                    Quantity = inventory.Quantity
+                }
+            );
+            _context.SaveChanges();
+            return inventory;
+        }
+
+        // public List<Model.Inventory> UpdateInventoryItem(Model.Inventory inventory)
+        // {
+            
+        // }
         private static Entity.StoreFront ConvertToEntity(Model.Location location)
         {
             if(location is not null)
