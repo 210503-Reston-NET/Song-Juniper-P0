@@ -78,11 +78,44 @@ namespace StoreUI
                     break;
 
                     case "3":
+                        PlaceOrder();
                     break;
 
                     default:
                         Console.WriteLine("I don't understand your input, please try again.");
                     break;
+                }
+            } while(repeat);
+        }
+
+        private void PlaceOrder()
+        {
+            Console.WriteLine("This is your current order");
+            Console.WriteLine(_currentLocation.ToString());
+            Console.WriteLine(_openOrder.ToString());
+            bool repeat = true;
+            do
+            {
+                Console.WriteLine("Would you like to place the order? [y/n]");
+                string input = Console.ReadLine().ToLower();
+                if(input == "y")
+                {
+                    repeat = false;
+                    try
+                    {
+                        _orderBL.CreateOrder(_openOrder);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                else if (input == "n") {
+                    repeat = false;
+                    return;
+                }
+                else {
+                    Console.WriteLine("I don't understand your input, please try again");
                 }
             } while(repeat);
         }

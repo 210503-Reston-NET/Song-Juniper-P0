@@ -46,7 +46,7 @@ namespace StoreModels
                 ItemString += "\n" + item.ToString();
                 total += item.Product.Price;
             }
-            return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {total}";
+            return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {Math.Round(total, 2)}";
         }
 
     }
