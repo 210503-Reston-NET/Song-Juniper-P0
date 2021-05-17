@@ -19,20 +19,20 @@ namespace StoreDL
         {
             return _context.Customers
             .Select(
-                customer => ConvertToModel(customer)
+                customer => customer.ToModel()
             ).ToList();
         }
 
         public Model.Customer GetCustomerById(int id)
         {
             Entity.Customer found = _context.Customers.FirstOrDefault(customer => customer.Id == id);
-            return ConvertToModel(found);
+            return found.ToModel();
         }
 
         public Model.Customer GetCustomerByName(string name)
         {
             Entity.Customer found = _context.Customers.FirstOrDefault(customer => customer.CustName == name);
-            return ConvertToModel(found);
+            return found.ToModel();
         }
 
         public Model.Customer AddNewCustomer(Model.Customer customer)
@@ -40,7 +40,7 @@ namespace StoreDL
             Entity.Customer newCust = _context.Customers.Add(ConvertToEntity(customer)).Entity;
             _context.SaveChanges();
 
-            return ConvertToModel(newCust);
+            return newCust.ToModel();
         }
 
         private static Entity.Customer ConvertToEntity(Model.Customer customer)

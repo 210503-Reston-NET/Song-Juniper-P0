@@ -25,8 +25,6 @@ namespace StoreUI
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[1] View All Locations");
                 Console.WriteLine("[2] Create a New Location");
-                // Console.WriteLine("[3] Remove a Location");
-                Console.WriteLine("[3] Manage a Location's Inventory");
                 Console.WriteLine("[0] Go Back");
                 string input = Console.ReadLine();
                 switch(input)
@@ -41,14 +39,6 @@ namespace StoreUI
 
                     case "2":
                         AddNewLocation();
-                    break;
-
-                    // case "3":
-                    //     RemoveLocation();
-                    // break;
-
-                    case "3":
-                        MenuFactory.GetMenu("inventory");
                     break;
 
                     default:

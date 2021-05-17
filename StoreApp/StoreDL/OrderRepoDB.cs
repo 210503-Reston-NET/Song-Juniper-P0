@@ -15,6 +15,17 @@ namespace StoreDL
             _context = context;
         }
 
+        public List<Model.Order> GetOrdersByCustomer(Customer customer) {
+            return _context.Orders.Where(order => order.CustId == customer.Id).Select(
+                order => order.ToModel()
+            ).ToList();
+        }
+
+        // public List<Model.Order> GetOrdersByLocation(Location location)
+        // {
+
+        // }
+
         public Model.Order GetOpenOrder(Model.Customer customer)
         {
             Entity.Order found = _context.Orders.FirstOrDefault(order => order.CustId == customer.Id && order.Closed == false);
@@ -63,13 +74,14 @@ namespace StoreDL
         public Entity.Order ToEntity(Model.Order order)
         {
             List<Entity.LineItem> items = new List<Entity.LineItem>();
-            foreach(Model.LineItem item in order.LineItems)
+            if(order.LineItems is not null && order.LineItems.Count > 0)
             {
-                items.Add(ToEntity(item));
+                foreach(Model.LineItem item in order.LineItems)
+                {
+                    items.Add(ToEntity(item));
+                }
             }
             return new Entity.Order {
-                Cust = ToEntity(order.Customer),
-                Store = ToEntity(order.Location),
                 CustId = order.Customer.Id,
                 StoreId = order.Location.Id,
                 Closed = order.Closed,
@@ -81,9 +93,12 @@ namespace StoreDL
         public Entity.Customer ToEntity(Model.Customer customer)
         {
             List<Entity.Order> orders = new List<Entity.Order>();
-            foreach(Model.Order order in customer.Orders)
+            if(customer.Orders is not null)
             {
-                orders.Add(ToEntity(order));
+                foreach(Model.Order order in customer.Orders)
+                {
+                    orders.Add(ToEntity(order));
+                }
             }
             return new Entity.Customer {
                 Id = customer.Id,
@@ -95,9 +110,12 @@ namespace StoreDL
         public Entity.StoreFront ToEntity(Model.Location location)
         {
             List<Entity.Inventory> inventories = new List<Entity.Inventory>();
-            foreach(Model.Inventory inven in location.Inventory)
+            if(location.Inventory is not null)
             {
-                inventories.Add(ToEntity(inven));
+                foreach(Model.Inventory inven in location.Inventory)
+                {
+                    inventories.Add(ToEntity(inven));
+                }
             }
             return new Entity.StoreFront {
                 Id = location.Id,
@@ -111,7 +129,8 @@ namespace StoreDL
         {
             return new Entity.Inventory {
                 Id = inven.Id,
-                Prod = ToEntity(inven.Product),
+                ProdId = inven.Product.Id,
+                StoreId = inven.Location.Id,
                 Quantity = inven.Quantity
             };
         }

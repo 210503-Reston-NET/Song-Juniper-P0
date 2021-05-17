@@ -26,8 +26,11 @@ namespace StoreDL.Entities
         public StoreModels.Order ToModel()
         {
             List<StoreModels.LineItem> modelItems = new List<StoreModels.LineItem>();
-            foreach(LineItem item in this.LineItems){
-                modelItems.Add(item.ToModel());
+            if(this.LineItems is not null)
+            {
+                foreach(LineItem item in this.LineItems){
+                    modelItems.Add(item.ToModel());
+                }
             }
             return new StoreModels.Order {
                 Id = this.Id,
@@ -35,7 +38,7 @@ namespace StoreDL.Entities
                 Location = this.Store.ToModel(),
                 LineItems = modelItems,
                 Closed = this.Closed,
-                Total = this.Total
+                Total = this.Total is null? 0.0 : this.Total
             };
         }
     }

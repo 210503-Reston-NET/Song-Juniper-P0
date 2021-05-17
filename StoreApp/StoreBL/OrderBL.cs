@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using StoreDL;
 using StoreModels;
 
@@ -25,6 +26,11 @@ namespace StoreBL
         public Order CreateOrder (Order order)
         {
             return _repo.CreateOrder(order);
+        }
+
+        public List<Order> GetOrdersByCustomer (Customer customer)
+        {
+            return _repo.GetOrdersByCustomer(customer);
         }
     }
 }

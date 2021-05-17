@@ -23,25 +23,6 @@ namespace StoreUI
         public void Start(Customer customer)
         {
             _currentCustomer = customer;
-            if(customer.Orders is null || customer.Orders.Count == 0)
-            {
-                Order newOrder = new Order {
-                    Customer = _currentCustomer,
-                    Location = _currentLocation
-                };
-                try
-                {
-                    _openOrder = _orderBL.CreateOrder(newOrder);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            } 
-            else
-            {
-                _openOrder = _orderBL.GetOpenOrder(customer);
-            }
             bool repeat = true;
             string input;
             do
@@ -61,11 +42,31 @@ namespace StoreUI
                     {
                         _currentLocation = allLocations[parsedInput];
                         Console.WriteLine($"You picked {_currentLocation.ToString()}");
+                        _currentCustomer.Orders = _orderBL.GetOrdersByCustomer(_currentCustomer);
                     }
                     else
                     {
                         Console.WriteLine("Invalid selection");
                     }
+                }
+                if(customer.Orders is null || customer.Orders.Count == 0)
+                {
+                    Order newOrder = new Order {
+                        Customer = _currentCustomer,
+                        Location = _currentLocation
+                    };
+                    try
+                    {
+                        _openOrder = _orderBL.CreateOrder(newOrder);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                } 
+                else
+                {
+                    _openOrder = _orderBL.GetOpenOrder(customer);
                 }
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[1] Browse all items");
