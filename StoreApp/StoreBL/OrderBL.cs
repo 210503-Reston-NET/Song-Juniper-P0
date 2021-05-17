@@ -13,14 +13,19 @@ namespace StoreBL
             _repo = repo;
         }
 
-        public Order GetOpenOrder(Customer customer)
+        public Order GetOpenOrder(int customerId, int locationId)
         {
-            return _repo.GetOpenOrder(customer);
+            return _repo.GetOpenOrder(customerId, locationId);
         }
 
-        public LineItem AddItemToOrder(LineItem item)
+        public Order AddItemToOrder(LineItem item)
         {
             return _repo.AddItemToOrder(item);
+        }
+
+        public Order UpdateItemToOrder(LineItem item)
+        {
+            return _repo.UpdateItemToOrder(item);
         }
 
         public Order CreateOrder (Order order)
@@ -28,9 +33,9 @@ namespace StoreBL
             return _repo.CreateOrder(order);
         }
 
-        public List<Order> GetOrdersByCustomer (Customer customer)
+        public List<Order> GetOrdersByCustomerAndLocation (int customerId, int locationId)
         {
-            return _repo.GetOrdersByCustomer(customer);
+            return _repo.GetOrdersByCustomerAndLocation(customerId, locationId);
         }
     }
 }

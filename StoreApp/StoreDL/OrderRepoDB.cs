@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using StoreModels;
 using Entity = StoreDL.Entities;
 using Model = StoreModels;
@@ -15,10 +16,14 @@ namespace StoreDL
             _context = context;
         }
 
-        public List<Model.Order> GetOrdersByCustomer(Customer customer) {
-            return _context.Orders.Where(order => order.CustId == customer.Id).Select(
+        public List<Model.Order> GetOrdersByCustomerAndLocation(int customerId, int locationId) {
+            return _context.Orders
+            .AsNoTracking()
+            .Where(order => order.CustId == customerId && order.StoreId == locationId)
+            .Select(
                 order => order.ToModel()
-            ).ToList();
+            )
+            .ToList();
         }
 
         // public List<Model.Order> GetOrdersByLocation(Location location)
@@ -26,9 +31,9 @@ namespace StoreDL
 
         // }
 
-        public Model.Order GetOpenOrder(Model.Customer customer)
+        public Model.Order GetOpenOrder(int customerId, int locationId)
         {
-            Entity.Order found = _context.Orders.FirstOrDefault(order => order.CustId == customer.Id && order.Closed == false);
+            Entity.Order found = _context.Orders.AsNoTracking().FirstOrDefault(order => order.CustId == customerId && order.StoreId == locationId && order.Closed == false);
             if(found is not null)
             {
                 return found.ToModel();
@@ -38,25 +43,46 @@ namespace StoreDL
 
         public Model.Order GetOrderById(int orderId)
         {
-            Entity.Order found = _context.Orders.FirstOrDefault(order => order.Id == orderId);
+            Entity.Order found = _context.Orders.AsNoTracking().FirstOrDefault(order => order.Id == orderId);
             if(found is not null)
             {
                 return found.ToModel();
             }
             else return null;
         }
-
-        public Model.LineItem AddItemToOrder(Model.LineItem item)
+/// <summary>
+/// This method is for adding a new product to an open order
+/// </summary>
+/// <param name="item"></param>
+/// <returns></returns>
+        public Model.Order AddItemToOrder(Model.LineItem item)
         {
-            Entity.LineItem added = _context.LineItems.Add(ToEntity(item)).Entity;
+            _context.LineItems.Add(ToEntity(item));
             _context.SaveChanges();
-            return added.ToModel();
+            _context.ChangeTracker.Clear();
+            return GetOrderById(item.OrderId);
         }
 
+/// <summary>
+/// this is for changing quantities of an item already in the cart
+/// </summary>
+/// <param name="item"></param>
+/// <returns></returns>
+        public Model.Order UpdateItemToOrder(Model.LineItem item)
+        {
+            Entity.LineItem toUpdate = _context.LineItems
+            .FirstOrDefault(it => it.Id == item.Id);
+            toUpdate.Quantity = item.Quantity;
+
+            _context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            return GetOrderById(item.OrderId);
+        }
         public Model.Order CreateOrder(Model.Order order)
         {
             Entity.Order added = _context.Orders.Add(ToEntity(order)).Entity;
             _context.SaveChanges();
+            _context.ChangeTracker.Clear();
             return GetOrderById(added.Id);
         }
 
@@ -66,8 +92,9 @@ namespace StoreDL
             return new Entity.LineItem {
                 Id = item.Id,
                 Quantity = item.Quantity,
-                OrderId = item.Order.Id,
-                ProdId = item.Product.Id
+                OrderId = item.OrderId,
+                ProdId = item.Product.Id,
+                Prod = ToEntity(item.Product)
             };
         }
 
@@ -82,8 +109,8 @@ namespace StoreDL
                 }
             }
             return new Entity.Order {
-                CustId = order.Customer.Id,
-                StoreId = order.Location.Id,
+                CustId = order.CustomerId,
+                StoreId = order.LocationId,
                 Closed = order.Closed,
                 DateCreated = order.DateCreated,
                 LineItems = items

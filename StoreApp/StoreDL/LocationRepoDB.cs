@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Entity = StoreDL.Entities;
 using Model = StoreModels;
 
@@ -16,6 +17,7 @@ namespace StoreDL
         public List<Model.Location> GetAllLocations()
         {
             return _context.StoreFronts
+            .AsNoTracking()
             .Select(
                 loc => ConvertToModel(loc)
             ).ToList();
@@ -23,13 +25,17 @@ namespace StoreDL
 
         public Model.Location GetLocationById(int id)
         {
-            Entity.StoreFront found = _context.StoreFronts.FirstOrDefault(loc => loc.Id == id);
+            Entity.StoreFront found = _context.StoreFronts
+            .AsNoTracking()
+            .FirstOrDefault(loc => loc.Id == id);
             return ConvertToModel(found);
         }
 
         public Model.Location GetLocationByName(string name)
         {
-            Entity.StoreFront found = _context.StoreFronts.FirstOrDefault(loc => loc.Sfname == name);
+            Entity.StoreFront found = _context.StoreFronts
+            .AsNoTracking()
+            .FirstOrDefault(loc => loc.Sfname == name);
             return ConvertToModel(found);
         }
 
@@ -37,13 +43,15 @@ namespace StoreDL
         {
             Entity.StoreFront locToAdd = _context.StoreFronts.Add(ConvertToEntity(loc)).Entity;
             _context.SaveChanges();
-
+            _context.ChangeTracker.Clear();
             return ConvertToModel(locToAdd);
         }
 
         public List<Model.Inventory> GetLocationInventory(int locationId)
         {
-            return _context.Inventories.Where(inventory => inventory.StoreId == locationId).Select(
+            return _context.Inventories.Where(inventory => inventory.StoreId == locationId)
+            .AsNoTracking()
+            .Select(
                 inventory => new Model.Inventory
                 {
                     Id = inventory.Id,
@@ -65,14 +73,18 @@ namespace StoreDL
                 }
             );
             _context.SaveChanges();
+            _context.ChangeTracker.Clear();
             return inventory;
         }
 
         public Model.Inventory UpdateInventoryItem(Model.Inventory inventory)
         {
-            Entity.Inventory toUpdate = _context.Inventories.FirstOrDefault(inven => inven.Id == inventory.Id);
+            Entity.Inventory toUpdate = _context.Inventories
+            .FirstOrDefault(inven => inven.Id == inventory.Id);
             toUpdate.Quantity = inventory.Quantity;
+            
             _context.SaveChanges();
+            _context.ChangeTracker.Clear();
             return inventory;
         }
         private static Entity.StoreFront ConvertToEntity(Model.Location location)

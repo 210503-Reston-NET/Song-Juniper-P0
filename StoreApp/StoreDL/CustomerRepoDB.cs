@@ -18,6 +18,7 @@ namespace StoreDL
         public List<Model.Customer> GetAllCustomers()
         {
             return _context.Customers
+            .AsNoTracking()
             .Select(
                 customer => customer.ToModel()
             ).ToList();
@@ -25,13 +26,17 @@ namespace StoreDL
 
         public Model.Customer GetCustomerById(int id)
         {
-            Entity.Customer found = _context.Customers.FirstOrDefault(customer => customer.Id == id);
+            Entity.Customer found = _context.Customers
+            .AsNoTracking()
+            .FirstOrDefault(customer => customer.Id == id);
             return found.ToModel();
         }
 
         public Model.Customer GetCustomerByName(string name)
         {
-            Entity.Customer found = _context.Customers.FirstOrDefault(customer => customer.CustName == name);
+            Entity.Customer found = _context.Customers
+            .AsNoTracking()
+            .FirstOrDefault(customer => customer.CustName == name);
             return found.ToModel();
         }
 
@@ -39,7 +44,7 @@ namespace StoreDL
         {
             Entity.Customer newCust = _context.Customers.Add(ConvertToEntity(customer)).Entity;
             _context.SaveChanges();
-
+            _context.ChangeTracker.Clear();
             return newCust.ToModel();
         }
 

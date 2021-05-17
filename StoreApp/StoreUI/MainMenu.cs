@@ -17,7 +17,7 @@ namespace StoreUI
             do
             {
                 string input;
-                if(_currentCustomer is null)
+                while(_currentCustomer is null)
                 {
                     Console.WriteLine("Welcome to the Wild Side Story!");
                     Console.WriteLine("We specialize in sourdough supplies and products");

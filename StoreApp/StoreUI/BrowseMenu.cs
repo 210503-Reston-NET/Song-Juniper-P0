@@ -42,36 +42,24 @@ namespace StoreUI
                     {
                         _currentLocation = allLocations[parsedInput];
                         Console.WriteLine($"You picked {_currentLocation.ToString()}");
-                        _currentCustomer.Orders = _orderBL.GetOrdersByCustomer(_currentCustomer);
                     }
                     else
                     {
                         Console.WriteLine("Invalid selection");
                     }
                 }
-                if(customer.Orders is null || customer.Orders.Count == 0)
+                if(_openOrder is null)
                 {
-                    Order newOrder = new Order {
-                        Customer = _currentCustomer,
-                        Location = _currentLocation
+                    _openOrder = new Order {
+                        CustomerId = _currentCustomer.Id,
+                        LocationId = _currentLocation.Id,
+                        LineItems = new List<LineItem>()
                     };
-                    try
-                    {
-                        _openOrder = _orderBL.CreateOrder(newOrder);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                } 
-                else
-                {
-                    _openOrder = _orderBL.GetOpenOrder(customer);
                 }
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[1] Browse all items");
-                Console.WriteLine("[2] View my cart");
-                Console.WriteLine("[3] Search items by category");
+                Console.WriteLine("[2] View current order");
+                Console.WriteLine("[3] Place Order");
                 Console.WriteLine("[0] Go Back");
                 input = Console.ReadLine();
 
@@ -113,30 +101,36 @@ namespace StoreUI
             }
             else
             {
-                Console.WriteLine("Select items to add to cart");
+                Console.WriteLine("Select an item to add to your cart");
                 for(int i = 0; i < allInventory.Count; i++)
                 {
                     Console.WriteLine($"[{i + 1}] {allInventory[i].ToString()}");
                 }
                 string input = Console.ReadLine();
                 Product selectedProd = allInventory[Int32.Parse(input) - 1].Product;
+                LineItem item = _openOrder.LineItems.Find(item => item.Product.Id == selectedProd.Id);
+                
                 Console.WriteLine("How many do you want?");
-                input = Console.ReadLine();
-
-                LineItem item = new LineItem {
-                    Product = selectedProd,
-                    Quantity = Int32.Parse(input),
-                    Order = _openOrder
-                };
-                try 
+                if(item is not null)
                 {
-                    _orderBL.AddItemToOrder(item);
+                    Console.WriteLine($"You currently have {item.Quantity} in your cart");
+                    input = Console.ReadLine();
+                    //there is already a same product in the cart
+                    //update that quantity instead
+                    item.Quantity = Int32.Parse(input);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine(ex.Message);
+                    input = Console.ReadLine();
+                    //this is a new product in this order. Add it.
+                    item = new LineItem {
+                        Product = selectedProd,
+                        Quantity = Int32.Parse(input),
+                        OrderId = _openOrder.Id
+                    };
+                    _openOrder.LineItems.Add(item);
+                    _openOrder.ToString();
                 }
-
             }
         }
 

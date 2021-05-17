@@ -8,8 +8,8 @@ namespace StoreDL.Entities
     public partial class LineItem
     {
         public int Id { get; set; }
-        public int? OrderId { get; set; }
-        public int? ProdId { get; set; }
+        public int OrderId { get; set; }
+        public int ProdId { get; set; }
         public int Quantity { get; set; }
 
         public virtual Order Order { get; set; }
@@ -19,8 +19,9 @@ namespace StoreDL.Entities
         {
             return new StoreModels.LineItem {
                 Id = this.Id,
-                Order = this.Order.ToModel(),
-                Product = this.Prod.ToModel()
+                OrderId = this.OrderId,
+                Product = this.Prod.ToModel(),
+                Quantity = this.Quantity
             };
         }
     }

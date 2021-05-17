@@ -13,37 +13,26 @@ namespace StoreModels
             this.Closed = false;
         }
 
-        public Order(Customer customer, Location location) : this()
+        public Order(int customerId, int storeId) : this()
         {
-            this.Customer = customer;
-            this.Location = location;
+            this.CustomerId = customerId;
+            this.LocationId = storeId;
         }
-        public Order(Customer customer, Location location, int id) : this(customer, location)
+        public Order(int customerId, int storeId, int id) : this(customerId, storeId)
         {
             this.Id = id;
         }
 
-        public Order(Customer customer, Location location, int id, List<LineItem> items)
+        public Order(int customerId, int storeId, int id, List<LineItem> items) : this(customerId, storeId, id)
         {
             this.LineItems = items;
-            this.Total = CalculateTotal(items);
         }
         public int Id { get; set; }
 
         public DateTime DateCreated { get; set; }
-        public Customer Customer { get; set; }
-        public Location Location { get; set; }
+        public int CustomerId { get; set; }
+        public int LocationId { get; set; }
         public List<LineItem> LineItems { get; set; }
-
-        public double CalculateTotal(List<LineItem> items)
-        {
-            double total = 0.0;
-            foreach(LineItem item in items)
-            {
-                total += item.Product.Price * item.Quantity;
-            }
-            return total;
-        }
 
         public bool Closed { get; set; }
         public double? Total { get; set; }
@@ -51,11 +40,13 @@ namespace StoreModels
         public override string ToString()
         {
             string ItemString = "";
+            double total = 0.0;
             foreach(LineItem item in this.LineItems)
-            {
+            {   
                 ItemString += "\n" + item.ToString();
+                total += item.Product.Price;
             }
-            return $"Location: {this.Location.ToString()} \nDateCreated: {this.DateCreated.ToString()} \nItems: {ItemString}";
+            return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {total}";
         }
 
     }

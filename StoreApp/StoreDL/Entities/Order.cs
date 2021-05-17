@@ -13,8 +13,8 @@ namespace StoreDL.Entities
         }
 
         public int Id { get; set; }
-        public int? CustId { get; set; }
-        public int? StoreId { get; set; }
+        public int CustId { get; set; }
+        public int StoreId { get; set; }
         public DateTime? DateCreated { get; set; }
         public double? Total { get; set; }
         public bool Closed { get; set; }
@@ -34,8 +34,8 @@ namespace StoreDL.Entities
             }
             return new StoreModels.Order {
                 Id = this.Id,
-                Customer = this.Cust.ToModel(),
-                Location = this.Store.ToModel(),
+                CustomerId = this.CustId,
+                LocationId = this.StoreId,
                 LineItems = modelItems,
                 Closed = this.Closed,
                 Total = this.Total is null? 0.0 : this.Total
