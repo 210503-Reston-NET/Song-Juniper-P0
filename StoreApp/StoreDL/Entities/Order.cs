@@ -17,10 +17,26 @@ namespace StoreDL.Entities
         public int? StoreId { get; set; }
         public DateTime? DateCreated { get; set; }
         public double? Total { get; set; }
-        public bool? Closed { get; set; }
+        public bool Closed { get; set; }
 
         public virtual Customer Cust { get; set; }
         public virtual StoreFront Store { get; set; }
         public virtual ICollection<LineItem> LineItems { get; set; }
+
+        public StoreModels.Order ToModel()
+        {
+            List<StoreModels.LineItem> modelItems = new List<StoreModels.LineItem>();
+            foreach(LineItem item in this.LineItems){
+                modelItems.Add(item.ToModel());
+            }
+            return new StoreModels.Order {
+                Id = this.Id,
+                Customer = this.Cust.ToModel(),
+                Location = this.Store.ToModel(),
+                LineItems = modelItems,
+                Closed = this.Closed,
+                Total = this.Total
+            };
+        }
     }
 }

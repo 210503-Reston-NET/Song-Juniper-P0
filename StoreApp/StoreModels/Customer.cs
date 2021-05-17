@@ -20,6 +20,11 @@ namespace StoreModels
         {
             this.Id = id;
         }
+
+        public Customer (int id, string name, List<Order> orders) : this(id, name)
+        {
+            this.Orders = orders;
+        }
         public string Name 
         {
             get { return _name; }
@@ -38,6 +43,8 @@ namespace StoreModels
         }
 
         public int Id { get; set; }
+
+        public List<Order> Orders { get; set; }
 
         public override string ToString()
         {

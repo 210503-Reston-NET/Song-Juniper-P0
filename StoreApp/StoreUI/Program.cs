@@ -10,7 +10,7 @@ namespace StoreUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            MenuFactory.GetMenu("main").Start();
+            MenuFactory.GetMenu("main").Start(null);
             //call method that starts main user interface
         }
     }

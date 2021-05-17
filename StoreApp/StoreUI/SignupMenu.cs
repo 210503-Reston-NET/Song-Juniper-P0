@@ -16,13 +16,13 @@ namespace StoreUI
             _customerBL = customerBL;
             _validationService = validationService;
         }
-        public bool Start()
+        public Customer Start()
         {
             string name =_validationService.ValidateString("Please enter your name:");
             return CreateNewCustomer(name);
         }
 
-        public bool CreateNewCustomer(string name)
+        public Customer CreateNewCustomer(string name)
         {
             using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
             {
@@ -31,7 +31,7 @@ namespace StoreUI
                     Customer newCustomer = new Customer(name);
                     _customerBL.AddNewCustomer(newCustomer);
                     Console.WriteLine("Sign up successful!");
-                    return true;
+                    return _customerBL.FindCustomerByName(name);
                 }
                 catch (Exception ex)
                 {

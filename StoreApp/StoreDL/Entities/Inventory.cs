@@ -14,5 +14,15 @@ namespace StoreDL.Entities
 
         public virtual Product Prod { get; set; }
         public virtual StoreFront Store { get; set; }
+
+        internal StoreModels.Inventory ToModel()
+        {
+            return new StoreModels.Inventory {
+                Id = this.Id,
+                Product = this.Prod.ToModel(),
+                Location = this.Store.ToModel(),
+                Quantity = this.Quantity
+            };
+        }
     }
 }

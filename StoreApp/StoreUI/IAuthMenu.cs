@@ -1,7 +1,9 @@
+using StoreModels;
+
 namespace StoreUI
 {
     public interface IAuthMenu
     {
-        bool Start();
+        Customer Start();
     }
 }

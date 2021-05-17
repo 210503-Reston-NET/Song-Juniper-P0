@@ -17,7 +17,7 @@ namespace StoreUI
             _locBL = locBL;
             _prodBL = prodBL;
         }
-        public void Start()
+        public void Start(Customer customer)
         {
             bool repeat = true;
             string input;

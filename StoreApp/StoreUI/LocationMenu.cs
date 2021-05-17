@@ -16,7 +16,7 @@ namespace StoreUI
             _locBL = locationBL;
             _validationService = validationService;
         }
-        public void Start()
+        public void Start(Customer customer)
         {
             bool repeat = true;
             do

@@ -1,24 +1,23 @@
 using System;
 using StoreBL;
 using StoreDL;
+using StoreModels;
 
 namespace StoreUI
 {
     public class MainMenu : IMenu
     {
-        private bool _login;
+        private Customer _currentCustomer;
 
-        public MainMenu()
+        public MainMenu() {}
+        public void Start(Customer customer)
         {
-            _login = false;
-        }
-        public void Start()
-        {
+            _currentCustomer = customer;
             bool repeat = true;
             do
             {
                 string input;
-                if(!_login)
+                if(_currentCustomer is null)
                 {
                     Console.WriteLine("Welcome to the Wild Side Story!");
                     Console.WriteLine("We specialize in sourdough supplies and products");
@@ -27,17 +26,17 @@ namespace StoreUI
                     switch(input.ToLower())
                     {
                         case "y":
-                            _login = AuthMenuFactory.GetMenu("login").Start();
+                            _currentCustomer = AuthMenuFactory.GetMenu("login").Start();
                         break;
 
                         case "n":
                             Console.WriteLine("Please sign up before continuing");
-                            _login = AuthMenuFactory.GetMenu("signup").Start();
+                            _currentCustomer = AuthMenuFactory.GetMenu("signup").Start();
                         break;
 
                         case "42":
-                            _login = true;
-                            MenuFactory.GetMenu("admin").Start();
+                            _currentCustomer = new Customer("admin");
+                            MenuFactory.GetMenu("admin").Start(_currentCustomer);
                         break;
 
                         default:
@@ -59,11 +58,11 @@ namespace StoreUI
                     break;
 
                     case "1":
-                        MenuFactory.GetMenu("browse").Start();
+                        MenuFactory.GetMenu("browse").Start(_currentCustomer);
                     break;
                     
                     case "42":
-                        MenuFactory.GetMenu("admin").Start();
+                        MenuFactory.GetMenu("admin").Start(_currentCustomer);
                     break;
                     
                     default:

@@ -25,6 +25,8 @@ namespace StoreModels
 
         public List<Inventory> Inventory { get; set; }
 
+        public List<Order> Orders { get; set; }
+
         public override string ToString()
         {
             return $"Name: {this.Name} \nAddress: {this.Address}";

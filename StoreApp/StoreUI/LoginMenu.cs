@@ -13,7 +13,7 @@ namespace StoreUI
         {
             _customerBL = customerBL;
         }
-        public bool Start()
+        public Customer Start()
         {
             bool repeat = true;
             do
@@ -21,7 +21,8 @@ namespace StoreUI
                 Console.WriteLine("Please log in before continuing");
                 Console.WriteLine("Please enter your name");
                 string name = Console.ReadLine();
-                if(FindCustomerByName(name) is null)
+                Customer currentCustomer = FindCustomerByName(name);
+                if(currentCustomer is null)
                 {
                     Console.WriteLine("Uh oh, we didn't find a match.");
                     Console.WriteLine("[1] Try Again");
@@ -44,11 +45,11 @@ namespace StoreUI
                 }
                 else 
                 {
-                    Console.WriteLine($"Welcome {name}!");
-                    return true;
+                    Console.WriteLine($"Welcome {currentCustomer.Name}!");
+                    return currentCustomer;
                 }
             } while(repeat);
-            return false;
+            return null;
         }
 
         public Customer FindCustomerByName(string name)

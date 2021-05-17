@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Model = StoreModels;
 
 #nullable disable
 
@@ -22,5 +23,15 @@ namespace StoreDL.Entities
 
         public virtual ICollection<Inventory> Inventories { get; set; }
         public virtual ICollection<LineItem> LineItems { get; set; }
+
+        public Model.Product ToModel ()
+        {
+            return new Model.Product {
+                Id = this.Id,
+                Name = this.ProdName,
+                Description = this.ProdDesc,
+                Price = this.Price
+            };
+        }
     }
 }

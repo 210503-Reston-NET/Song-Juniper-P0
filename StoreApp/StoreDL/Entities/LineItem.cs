@@ -14,5 +14,14 @@ namespace StoreDL.Entities
 
         public virtual Order Order { get; set; }
         public virtual Product Prod { get; set; }
+
+        internal StoreModels.LineItem ToModel()
+        {
+            return new StoreModels.LineItem {
+                Id = this.Id,
+                Order = this.Order.ToModel(),
+                Product = this.Prod.ToModel()
+            };
+        }
     }
 }

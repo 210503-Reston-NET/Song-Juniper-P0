@@ -9,15 +9,39 @@ namespace StoreUI
     {
         private LocationBL _locationBL;
         private ProductBL _productBL;
+        private OrderBL _orderBL;
         private Location _currentLocation;
+        private Customer _currentCustomer;
+        private Order _openOrder;
 
-        public BrowseMenu(LocationBL locationBL, ProductBL productBL)
+        public BrowseMenu(LocationBL locationBL, ProductBL productBL, OrderBL orderBL)
         {
             _locationBL = locationBL;
             _productBL = productBL;
+            _orderBL = orderBL;
         }
-        public void Start()
+        public void Start(Customer customer)
         {
+            _currentCustomer = customer;
+            if(customer.Orders is null || customer.Orders.Count == 0)
+            {
+                Order newOrder = new Order {
+                    Customer = _currentCustomer,
+                    Location = _currentLocation
+                };
+                try
+                {
+                    _openOrder = _orderBL.CreateOrder(newOrder);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } 
+            else
+            {
+                _openOrder = _orderBL.GetOpenOrder(customer);
+            }
             bool repeat = true;
             string input;
             do
@@ -45,7 +69,7 @@ namespace StoreUI
                 }
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[1] Browse all items");
-                Console.WriteLine("[2] Search items by name");
+                Console.WriteLine("[2] View my cart");
                 Console.WriteLine("[3] Search items by category");
                 Console.WriteLine("[0] Go Back");
                 input = Console.ReadLine();
@@ -57,10 +81,11 @@ namespace StoreUI
                     break;
 
                     case "1":
-                        ViewAllProducts();
+                        ViewInventory(_currentLocation.Id);
                     break;
 
                     case "2":
+                        ViewCart();
                     break;
 
                     case "3":
@@ -78,21 +103,45 @@ namespace StoreUI
             return _locationBL.GetAllLocations();
         }
 
-        public void ViewAllProducts()
+        public void ViewInventory(int locId)
         {
-            List<Product> allProducts = _productBL.GetAllProducts();
-            if(allProducts.Count == 0)
+            List<Inventory> allInventory =  _locationBL.GetLocationInventory(locId);
+            if(allInventory.Count == 0)
             {
-                Console.WriteLine("No products to display!");
+                Console.WriteLine("Looks like this store is empty :(");
             }
             else
             {
-                foreach(Product prod in allProducts)
+                Console.WriteLine("Select items to add to cart");
+                for(int i = 0; i < allInventory.Count; i++)
                 {
-                    Console.WriteLine(prod.ToString() + "\n");
+                    Console.WriteLine($"[{i + 1}] {allInventory[i].ToString()}");
                 }
+                string input = Console.ReadLine();
+                Product selectedProd = allInventory[Int32.Parse(input) - 1].Product;
+                Console.WriteLine("How many do you want?");
+                input = Console.ReadLine();
+
+                LineItem item = new LineItem {
+                    Product = selectedProd,
+                    Quantity = Int32.Parse(input),
+                    Order = _openOrder
+                };
+                try 
+                {
+                    _orderBL.AddItemToOrder(item);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
             }
-            
+        }
+
+        public void ViewCart()
+        {
+            Console.WriteLine(_openOrder.ToString());
         }
     }
 }

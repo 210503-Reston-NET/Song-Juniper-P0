@@ -1,11 +1,14 @@
 using System;
+using StoreModels;
 
 namespace StoreUI
 {
     public class AdminMenu : IMenu
     {
-        public void Start()
+        private Customer _currentCustomer;
+        public void Start(Customer customer)
         {
+            _currentCustomer = customer;
             bool repeat = true;
             bool access = false;
             do
@@ -39,15 +42,15 @@ namespace StoreUI
                     break;
 
                     case "1":
-                        MenuFactory.GetMenu("location").Start();
+                        MenuFactory.GetMenu("location").Start(_currentCustomer);
                     break;
 
                     case "2":
-                        MenuFactory.GetMenu("product").Start();
+                        MenuFactory.GetMenu("product").Start(_currentCustomer);
                     break;
 
                     case "3":
-                        MenuFactory.GetMenu("inventory").Start();
+                        MenuFactory.GetMenu("inventory").Start(_currentCustomer);
                     break;
 
                     default:
