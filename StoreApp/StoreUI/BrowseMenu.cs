@@ -51,6 +51,7 @@ namespace StoreUI
                 if(_openOrder is null)
                 {
                     _openOrder = new Order {
+                        
                         CustomerId = _currentCustomer.Id,
                         LocationId = _currentLocation.Id,
                         LineItems = new List<LineItem>()
@@ -103,7 +104,17 @@ namespace StoreUI
                     repeat = false;
                     try
                     {
+                        _openOrder.Closed = true;
                         _orderBL.CreateOrder(_openOrder);
+                        //update the store's inventory after the successful placement of the order
+                        List<Inventory> allInventory =  _locationBL.GetLocationInventory(_currentLocation.Id);
+                        foreach(LineItem lineItem in _openOrder.LineItems)
+                        {
+                            Inventory boughtItem = allInventory.Find(invenItem => invenItem.Product.Id == lineItem.Product.Id);
+                            boughtItem.Quantity -= lineItem.Quantity;
+                            _locationBL.UpdateInventoryItem(boughtItem);
+                        }
+                        Console.WriteLine("Order placed successfully!");
                     }
                     catch(Exception ex)
                     {
@@ -151,6 +162,7 @@ namespace StoreUI
                     //there is already a same product in the cart
                     //update that quantity instead
                     item.Quantity = Int32.Parse(input);
+                    _openOrder.UpdateTotal();
                 }
                 else
                 {
@@ -162,6 +174,7 @@ namespace StoreUI
                         OrderId = _openOrder.Id
                     };
                     _openOrder.LineItems.Add(item);
+                    _openOrder.UpdateTotal();
                     _openOrder.ToString();
                 }
             }

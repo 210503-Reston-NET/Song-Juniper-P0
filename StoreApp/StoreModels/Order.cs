@@ -23,6 +23,11 @@ namespace StoreModels
             this.Id = id;
         }
 
+        public Order(int customerId, int storeId, List<LineItem> items) : this(customerId, storeId)
+        {
+            this.LineItems = items;
+        }
+
         public Order(int customerId, int storeId, int id, List<LineItem> items) : this(customerId, storeId, id)
         {
             this.LineItems = items;
@@ -40,13 +45,22 @@ namespace StoreModels
         public override string ToString()
         {
             string ItemString = "";
-            double total = 0.0;
             foreach(LineItem item in this.LineItems)
             {   
                 ItemString += "\n" + item.ToString();
+            }
+            return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {this.Total}";
+        }
+
+        public void UpdateTotal()
+        {
+            if(this.LineItems is null) this.Total = 0.0;
+            double total = 0.0;
+            foreach(LineItem item in this.LineItems)
+            {
                 total += item.Product.Price * item.Quantity;
             }
-            return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {Math.Round(total, 2)}";
+            this.Total = Math.Round(total, 2);
         }
 
     }

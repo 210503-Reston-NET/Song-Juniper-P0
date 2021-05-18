@@ -82,10 +82,10 @@ namespace StoreDL
         }
         public Model.Order CreateOrder(Model.Order order)
         {
-            Entity.Order added = _context.Orders.Add(ToEntity(order)).Entity;
+            _context.Orders.Add(_mapper.ParseOrder(order, true));
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
-            return GetOrderById(added.Id);
+            return order;
         }
 
         
