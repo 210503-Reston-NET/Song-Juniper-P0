@@ -59,12 +59,14 @@ namespace StoreUI
 
         private void ViewOrders()
         {
-            Console.WriteLine("This is View Orders function");
             _ordersFromCustomer = _orderBL.GetOrdersByCustomerId(_currentCustomer.Id);
+            _allLocations = _locationBL.GetAllLocations();
+            Location orderLocation;
             foreach(Order order in _ordersFromCustomer)
             {
                 order.LineItems = _orderBL.GetLineItemsByOrderId(order.Id);
-                Console.WriteLine(order.ToString());
+                orderLocation = _allLocations.Find(loc => loc.Id == order.LocationId);
+                Console.WriteLine($"Location: \n{orderLocation.ToString()} \nOrder Detail: \n{order.ToString()} \n\n");
             }
         }
 

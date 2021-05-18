@@ -49,7 +49,7 @@ namespace StoreModels
             {   
                 ItemString += "\n" + item.ToString();
             }
-            return $"Date Created: {this.DateCreated.ToString("f")} \nItems: {ItemString} \nTotal: {this.Total}";
+            return $"Date Created: {this.DateCreated.ToString("D")} \nItems: {ItemString} \nTotal: {this.Total}";
         }
 
         public void UpdateTotal()
