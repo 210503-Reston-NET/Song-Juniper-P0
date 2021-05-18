@@ -28,10 +28,32 @@ namespace StoreDL
             .ToList();
         }
 
-        // public List<Model.Order> GetOrdersByLocation(Location location)
-        // {
+        public List<Model.Order> GetOrdersByCustomerId(int customerId)
+        {
+            return _context.Orders
+            .AsNoTracking()
+            .Where(order => order.CustomerId == customerId)
+            .Select(order => _mapper.ParseOrder(order))
+            .ToList();
+        }
 
-        // }
+        public List<Model.LineItem> GetLineItemsByOrderId(int orderId)
+        {
+            return _context.LineItems
+            .AsNoTracking()
+            .Include("Product")
+            .Where(item => item.OrderId == orderId)
+            .Select(item => _mapper.ParseLineItem(item))
+            .ToList();
+        }
+
+        public Model.LineItem CreateLineItem(Model.LineItem item)
+        {
+            _context.LineItems.Add(_mapper.ParseLineItem(item, true));
+            _context.SaveChanges();
+            _context.ChangeTracker.Clear();
+            return item;
+        }
 
         public Model.Order GetOpenOrder(int customerId, int locationId)
         {
@@ -82,10 +104,10 @@ namespace StoreDL
         }
         public Model.Order CreateOrder(Model.Order order)
         {
-            _context.Orders.Add(_mapper.ParseOrder(order, true));
+            Entity.Order added = _context.Orders.Add(_mapper.ParseOrder(order, true)).Entity;
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
-            return order;
+            return _mapper.ParseOrder(added);
         }
 
         

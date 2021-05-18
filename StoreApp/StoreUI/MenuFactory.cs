@@ -48,6 +48,9 @@ namespace StoreUI
                 case "inventory":
                     return new InventoryMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)));
 
+                case "profile":
+                    return new ProfileMenu(new OrderBL(new OrderRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)), new LocationBL(new LocationRepoDB(context, mapper)));
+
                 default:
                     return null;
             }

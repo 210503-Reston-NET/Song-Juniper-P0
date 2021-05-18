@@ -48,6 +48,7 @@ namespace StoreUI
                 
                 Console.WriteLine("What would you like to do today?");
                 Console.WriteLine("[1] Browse Items");
+                Console.WriteLine("[2] My Profile");
                 Console.WriteLine("[0] Exit");
                 input = Console.ReadLine();
                 switch(input)
@@ -60,7 +61,11 @@ namespace StoreUI
                     case "1":
                         MenuFactory.GetMenu("browse").Start(_currentCustomer);
                     break;
-                    
+
+                    case "2":
+                        MenuFactory.GetMenu("profile").Start(_currentCustomer);
+                    break;
+
                     case "42":
                         MenuFactory.GetMenu("admin").Start(_currentCustomer);
                     break;

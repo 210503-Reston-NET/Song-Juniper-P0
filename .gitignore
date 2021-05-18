@@ -8,6 +8,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+appsettings.json
+scaffolding-command.txt
+launch.json
+tasks.json
 # User-specific files
 *.rsuser
 *.suo

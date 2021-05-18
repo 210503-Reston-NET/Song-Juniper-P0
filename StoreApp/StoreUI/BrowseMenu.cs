@@ -104,10 +104,23 @@ namespace StoreUI
                     repeat = false;
                     try
                     {
+                        //first, close the order
                         _openOrder.Closed = true;
-                        _orderBL.CreateOrder(_openOrder);
-                        //update the store's inventory after the successful placement of the order
+
+                        //and then, create the order
+                        int createdId = _orderBL.CreateOrder(_openOrder).Id;
+
+                        //Now we need to create line items associated to the order
+                        foreach(LineItem item in _openOrder.LineItems)
+                        {
+                            item.OrderId = createdId;
+                            _orderBL.CreateLineItem(item);
+                        }
+
+                        //update the store's inventory after the successful placement of the order by getting all the inventory of the location of the order
                         List<Inventory> allInventory =  _locationBL.GetLocationInventory(_currentLocation.Id);
+
+                        //and then update the inventory of the order and persist it to the DB 
                         foreach(LineItem lineItem in _openOrder.LineItems)
                         {
                             Inventory boughtItem = allInventory.Find(invenItem => invenItem.Product.Id == lineItem.Product.Id);
@@ -115,6 +128,11 @@ namespace StoreUI
                             _locationBL.UpdateInventoryItem(boughtItem);
                         }
                         Console.WriteLine("Order placed successfully!");
+                        _openOrder = new Order {
+                            CustomerId = _currentCustomer.Id,
+                            LocationId = _currentLocation.Id,
+                            LineItems = new List<LineItem>()
+                        };
                     }
                     catch(Exception ex)
                     {

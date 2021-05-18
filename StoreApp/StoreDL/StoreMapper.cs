@@ -137,6 +137,7 @@ namespace StoreDL
                 CustomerId = order.CustomerId,
                 LocationId = order.StoreId,
                 LineItems = lineitems,
+                Total = order.Total,
                 Closed = order.Placed
             };
         }

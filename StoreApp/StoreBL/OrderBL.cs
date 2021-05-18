@@ -37,5 +37,20 @@ namespace StoreBL
         {
             return _repo.GetOrdersByCustomerAndLocation(customerId, locationId);
         }
+
+        public List<Order> GetOrdersByCustomerId (int customerId)
+        {
+            return _repo.GetOrdersByCustomerId(customerId);
+        }
+
+        public List<LineItem> GetLineItemsByOrderId(int orderId)
+        {
+            return _repo.GetLineItemsByOrderId(orderId);
+        }
+
+        public LineItem CreateLineItem(LineItem item)
+        {
+            return _repo.CreateLineItem(item);
+        }
     }
 }
