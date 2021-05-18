@@ -10,14 +10,14 @@ namespace StoreModels
     {
         public Inventory() {}
 
-        public Inventory(Product product, Location store, int quant)
+        public Inventory(Product product, int storeId, int quant)
         {
             this.Product = product;
-            this.Location = store;
+            this.LocationId = storeId;
             this.Quantity = quant;
         }
 
-        public Inventory(Product product, Location store, int quant, int id): this(product, store, quant)
+        public Inventory(Product product, int storeId, int quant, int id): this(product, storeId, quant)
         {
             this.Id = id;
         }
@@ -25,7 +25,7 @@ namespace StoreModels
         public int Id { get; set; }
         public Product Product { get; set; }
 
-        public Location Location { get; set; }
+        public int LocationId { get; set; }
 
         public int Quantity { get; set; }
 

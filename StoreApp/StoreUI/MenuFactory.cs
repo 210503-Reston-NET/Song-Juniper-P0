@@ -26,6 +26,7 @@ namespace StoreUI
             .Options;
             //passing the options we just built
             var context = new wssdbContext(options);
+            IMapper mapper = new StoreMapper();
 
             switch (menuType.ToLower())
             {
@@ -33,19 +34,19 @@ namespace StoreUI
                     return new MainMenu();
 
                 case "browse":
-                    return new BrowseMenu(new LocationBL(new LocationRepoDB(context)), new ProductBL(new ProductRepoDB(context)), new OrderBL(new OrderRepoDB(context)));
+                    return new BrowseMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)), new OrderBL(new OrderRepoDB(context, mapper)));
 
                 case "admin":
                     return new AdminMenu();
                 
                 case "location":
-                    return new LocationMenu(new LocationBL(new LocationRepoDB(context)), new ValidationService());
+                    return new LocationMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ValidationService());
 
                 case "product":
-                    return new ProductMenu(new ProductBL(new ProductRepoDB(context)), new ValidationService());
+                    return new ProductMenu(new ProductBL(new ProductRepoDB(context, mapper)), new ValidationService());
                 
                 case "inventory":
-                    return new InventoryMenu(new LocationBL(new LocationRepoDB(context)), new ProductBL(new ProductRepoDB(context)));
+                    return new InventoryMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)));
 
                 default:
                     return null;

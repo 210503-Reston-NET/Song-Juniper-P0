@@ -11,17 +11,19 @@ namespace StoreDL
     public class OrderRepoDB
     {
         private Entity.wssdbContext _context;
-        public OrderRepoDB(Entity.wssdbContext context)
+        private IMapper _mapper;
+        public OrderRepoDB(Entity.wssdbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<Model.Order> GetOrdersByCustomerAndLocation(int customerId, int locationId) {
             return _context.Orders
             .AsNoTracking()
-            .Where(order => order.CustId == customerId && order.StoreId == locationId)
+            .Where(order => order.CustomerId == customerId && order.StoreId == locationId)
             .Select(
-                order => order.ToModel()
+                order => _mapper.ParseOrder(order)
             )
             .ToList();
         }
@@ -33,10 +35,10 @@ namespace StoreDL
 
         public Model.Order GetOpenOrder(int customerId, int locationId)
         {
-            Entity.Order found = _context.Orders.AsNoTracking().FirstOrDefault(order => order.CustId == customerId && order.StoreId == locationId && order.Closed == false);
+            Entity.Order found = _context.Orders.AsNoTracking().FirstOrDefault(order => order.CustomerId == customerId && order.StoreId == locationId && order.Placed == false);
             if(found is not null)
             {
-                return found.ToModel();
+                return _mapper.ParseOrder(found);
             }
             else return null;
         }
@@ -46,7 +48,7 @@ namespace StoreDL
             Entity.Order found = _context.Orders.AsNoTracking().FirstOrDefault(order => order.Id == orderId);
             if(found is not null)
             {
-                return found.ToModel();
+                return _mapper.ParseOrder(found);
             }
             else return null;
         }
@@ -93,8 +95,8 @@ namespace StoreDL
                 Id = item.Id,
                 Quantity = item.Quantity,
                 OrderId = item.OrderId,
-                ProdId = item.Product.Id,
-                Prod = ToEntity(item.Product)
+                ProductId = item.Product.Id,
+                Product = ToEntity(item.Product)
             };
         }
 
@@ -109,9 +111,9 @@ namespace StoreDL
                 }
             }
             return new Entity.Order {
-                CustId = order.CustomerId,
+                CustomerId = order.CustomerId,
                 StoreId = order.LocationId,
-                Closed = order.Closed,
+                Placed = order.Closed,
                 DateCreated = order.DateCreated,
                 LineItems = items
             };
@@ -129,7 +131,7 @@ namespace StoreDL
             }
             return new Entity.Customer {
                 Id = customer.Id,
-                CustName = customer.Name,
+                CName = customer.Name,
                 Orders = orders
             };
         }
@@ -146,8 +148,8 @@ namespace StoreDL
             }
             return new Entity.StoreFront {
                 Id = location.Id,
-                Sfname = location.Name,
-                Sfaddress = location.Address,
+                SName = location.Name,
+                SAddress = location.Address,
                 Inventories = inventories 
             };
         }
@@ -156,8 +158,8 @@ namespace StoreDL
         {
             return new Entity.Inventory {
                 Id = inven.Id,
-                ProdId = inven.Product.Id,
-                StoreId = inven.Location.Id,
+                ProductId = inven.Product.Id,
+                StoreId = inven.LocationId,
                 Quantity = inven.Quantity
             };
         }
@@ -167,8 +169,8 @@ namespace StoreDL
             return new Entity.Product
             {
                 Id = prod.Id,
-                ProdName = prod.Name,
-                ProdDesc = prod.Description,
+                PName = prod.Name,
+                PDesc = prod.Description,
                 Price = prod.Price
             };
         }

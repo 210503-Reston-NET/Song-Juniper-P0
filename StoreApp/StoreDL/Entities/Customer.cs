@@ -13,20 +13,8 @@ namespace StoreDL.Entities
         }
 
         public int Id { get; set; }
-        public string CustName { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public string CName { get; set; }
 
-        public StoreModels.Customer ToModel()
-        {
-            List<StoreModels.Order> modelOrders = new List<StoreModels.Order>();
-            foreach(Order order in this.Orders) {
-                modelOrders.Add(order.ToModel());
-            }
-            return new StoreModels.Customer {
-                Id = this.Id,
-                Name = this.CustName,
-                Orders = modelOrders
-            };
-        }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

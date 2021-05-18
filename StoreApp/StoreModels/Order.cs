@@ -35,7 +35,7 @@ namespace StoreModels
         public List<LineItem> LineItems { get; set; }
 
         public bool Closed { get; set; }
-        public double? Total { get; set; }
+        public double Total { get; set; }
 
         public override string ToString()
         {
@@ -44,7 +44,7 @@ namespace StoreModels
             foreach(LineItem item in this.LineItems)
             {   
                 ItemString += "\n" + item.ToString();
-                total += item.Product.Price;
+                total += item.Product.Price * item.Quantity;
             }
             return $"DateCreated: {this.DateCreated.ToString()} \nItems: {ItemString} \nTotal: {Math.Round(total, 2)}";
         }

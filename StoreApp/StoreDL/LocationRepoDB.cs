@@ -9,9 +9,11 @@ namespace StoreDL
     public class LocationRepoDB
     {
         private Entity.wssdbContext _context;
-        public LocationRepoDB(Entity.wssdbContext context)
+        private IMapper _mapper;
+        public LocationRepoDB(Entity.wssdbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<Model.Location> GetAllLocations()
@@ -19,7 +21,7 @@ namespace StoreDL
             return _context.StoreFronts
             .AsNoTracking()
             .Select(
-                loc => ConvertToModel(loc)
+                loc => _mapper.ParseStore(loc)
             ).ToList();
         }
 
@@ -28,37 +30,34 @@ namespace StoreDL
             Entity.StoreFront found = _context.StoreFronts
             .AsNoTracking()
             .FirstOrDefault(loc => loc.Id == id);
-            return ConvertToModel(found);
+            return _mapper.ParseStore(found);
         }
 
         public Model.Location GetLocationByName(string name)
         {
             Entity.StoreFront found = _context.StoreFronts
             .AsNoTracking()
-            .FirstOrDefault(loc => loc.Sfname == name);
-            return ConvertToModel(found);
+            .FirstOrDefault(loc => loc.SName == name);
+            return _mapper.ParseStore(found);
         }
 
         public Model.Location AddNewLocation(Model.Location loc)
         {
-            Entity.StoreFront locToAdd = _context.StoreFronts.Add(ConvertToEntity(loc)).Entity;
+            Entity.StoreFront locToAdd = _context.StoreFronts
+            .Add(_mapper.ParseStore(loc, true)).Entity;
+            
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
-            return ConvertToModel(locToAdd);
+            return _mapper.ParseStore(locToAdd);
         }
 
         public List<Model.Inventory> GetLocationInventory(int locationId)
         {
             return _context.Inventories.Where(inventory => inventory.StoreId == locationId)
             .AsNoTracking()
+            .Include("Product")
             .Select(
-                inventory => new Model.Inventory
-                {
-                    Id = inventory.Id,
-                    Product = ProductRepoDB.ConvertToModel(inventory.Prod),
-                    Quantity = inventory.Quantity,
-                    Location = LocationRepoDB.ConvertToModel(inventory.Store),
-                }
+                inventory => _mapper.ParseInventory(inventory)
             ).ToList();
 
         }
@@ -66,11 +65,7 @@ namespace StoreDL
         public Model.Inventory AddInventory(Model.Inventory inventory)
         {
             _context.Inventories.Add(
-                new Entity.Inventory{
-                    StoreId = inventory.Location.Id,
-                    ProdId = inventory.Product.Id,
-                    Quantity = inventory.Quantity
-                }
+                _mapper.ParseInventory(inventory, true)
             );
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
@@ -86,37 +81,6 @@ namespace StoreDL
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
             return inventory;
-        }
-        private static Entity.StoreFront ConvertToEntity(Model.Location location)
-        {
-            if(location is not null)
-            {
-                if(location.Id == 0)
-                    return new Entity.StoreFront{
-                        Sfname = location.Name,
-                        Sfaddress = location.Address
-                    };
-                else
-                    return new Entity.StoreFront{
-                        Id = location.Id,
-                        Sfname = location.Name,
-                        Sfaddress = location.Address
-                    };
-            }
-            else return null;
-        }
-
-        private static Model.Location ConvertToModel(Entity.StoreFront store)
-        {
-            if(store is not null)
-            {
-                return new Model.Location{
-                    Id = store.Id,
-                    Name = store.Sfname,
-                    Address = store.Sfaddress
-                };
-            }
-            else return null;
         }
     }
 }

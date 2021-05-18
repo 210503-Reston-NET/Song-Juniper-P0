@@ -14,6 +14,7 @@ namespace StoreTests
     public class CustomerRepoTest
     {
         private readonly DbContextOptions<Entity.wssdbContext> options;
+        private IMapper mapper;
         //XUnit creates new instances of test classes, so you need to make sure that your db is seeded for each test class
 
         public CustomerRepoTest()
@@ -22,6 +23,7 @@ namespace StoreTests
             .UseSqlite("Filename = Test.db")
             .Options;
             Seed();
+            mapper = new StoreMapper();
         }
 
         //testing read operation
@@ -31,7 +33,7 @@ namespace StoreTests
             using(var context = new Entity.wssdbContext(options))
             {
                 //Arrange the test context
-                CustomerRepoDB _repo = new CustomerRepoDB(context);
+                CustomerRepoDB _repo = new CustomerRepoDB(context, mapper);
 
                 //Act
                 var customers = _repo.GetAllCustomers();
@@ -45,7 +47,7 @@ namespace StoreTests
         {
             using (var context = new Entity.wssdbContext(options))
             {
-                CustomerRepoDB _repo = new CustomerRepoDB(context);
+                CustomerRepoDB _repo = new CustomerRepoDB(context, mapper);
                 //Act with a test context
                 _repo.AddNewCustomer
                 (
@@ -58,7 +60,7 @@ namespace StoreTests
                 //Assert with a different context
                 var result = assertContext.Customers.FirstOrDefault(cust => cust.Id == 4);
                 Assert.NotNull(result);
-                Assert.Equal("Test User", result.CustName);
+                Assert.Equal("Test User", result.CName);
             }
         }
 
@@ -75,15 +77,15 @@ namespace StoreTests
                 (
                     new Entity.Customer {
                         Id = 1,
-                        CustName = "Auryn"
+                        CName = "Auryn"
                     },
                     new Entity.Customer {
                         Id = 2,
-                        CustName = "Melix"
+                        CName = "Melix"
                     },
                     new Entity.Customer {
                         Id = 3,
-                        CustName = "Roaringsheep"
+                        CName = "Roaringsheep"
                     }
                 );
                 context.SaveChanges();

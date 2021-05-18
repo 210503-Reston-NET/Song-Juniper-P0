@@ -111,7 +111,7 @@ namespace StoreUI
             input = Console.ReadLine();
             parsedInput = Int32.Parse(input);
 
-            Inventory newInven = new Inventory (selectedProd, _currentLocation, parsedInput);
+            Inventory newInven = new Inventory (selectedProd, _currentLocation.Id, parsedInput);
 
             try
             {

@@ -26,14 +26,15 @@ namespace StoreUI
             .Options;
             //passing the options we just built
             var context = new wssdbContext(options);
+            IMapper mapper = new StoreMapper();
 
             switch (menuType.ToLower())
             {
                 case "login":
-                    return new LoginMenu(new CustomerBL(new CustomerRepoDB(context)));
+                    return new LoginMenu(new CustomerBL(new CustomerRepoDB(context, mapper)));
 
                 case "signup":
-                    return new SignupMenu(new CustomerBL(new CustomerRepoDB(context)), new ValidationService());
+                    return new SignupMenu(new CustomerBL(new CustomerRepoDB(context, mapper)), new ValidationService());
 
                 default:
                     return null;

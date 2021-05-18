@@ -8,21 +8,11 @@ namespace StoreDL.Entities
     public partial class Inventory
     {
         public int Id { get; set; }
-        public int? StoreId { get; set; }
-        public int? ProdId { get; set; }
+        public int StoreId { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
 
-        public virtual Product Prod { get; set; }
+        public virtual Product Product { get; set; }
         public virtual StoreFront Store { get; set; }
-
-        internal StoreModels.Inventory ToModel()
-        {
-            return new StoreModels.Inventory {
-                Id = this.Id,
-                Product = this.Prod.ToModel(),
-                Location = this.Store.ToModel(),
-                Quantity = this.Quantity
-            };
-        }
     }
 }

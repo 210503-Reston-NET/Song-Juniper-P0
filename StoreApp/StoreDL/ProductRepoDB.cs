@@ -10,75 +10,39 @@ namespace StoreDL
     public class ProductRepoDB
     {
         private Entity.wssdbContext _context;
-        public ProductRepoDB(Entity.wssdbContext context)
+        private IMapper _mapper;
+        public ProductRepoDB(Entity.wssdbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<Model.Product> GetAllProducts()
         {
             return _context.Products
             .Select(
-                prod => ConvertToModel(prod)
+                prod => _mapper.ParseProduct(prod)
             ).ToList();
         }
 
         public Model.Product GetProductById(int id)
         {
             Entity.Product found = _context.Products.FirstOrDefault(loc => loc.Id == id);
-            return ConvertToModel(found);
+            return _mapper.ParseProduct(found);
         }
 
         public Model.Product GetProductByName(string name)
         {
-            Entity.Product found = _context.Products.FirstOrDefault(loc => loc.ProdName == name);
-            return ConvertToModel(found);
+            Entity.Product found = _context.Products.FirstOrDefault(loc => loc.PName == name);
+            return _mapper.ParseProduct(found);
         }
 
         public Model.Product AddNewProduct(Model.Product product)
         {
-            Entity.Product prodToAdd = _context.Products.Add(ConvertToEntity(product)).Entity;
+            Entity.Product prodToAdd = _context.Products.Add(_mapper.ParseProduct(product, true)).Entity;
             _context.SaveChanges();
 
-            return ConvertToModel(prodToAdd);
-        }
-
-        public static Entity.Product ConvertToEntity(Model.Product prod)
-        {
-            if(prod is not null)
-            {
-                if(prod.Id == 0)
-                    return new Entity.Product{
-                        ProdName = prod.Name,
-                        ProdDesc = prod.Description,
-                        Price = prod.Price,
-                        Category = prod.Category
-                    };
-                else
-                    return new Entity.Product{
-                        Id = prod.Id,
-                        ProdName = prod.Name,
-                        ProdDesc = prod.Description,
-                        Price = prod.Price,
-                        Category = prod.Category
-                    };
-            }
-            else return null;
-        }
-
-        public static Model.Product ConvertToModel(Entity.Product product)
-        {
-            if(product is not null)
-            {
-                return new Model.Product{
-                    Id = product.Id,
-                    Name = product.ProdName,
-                    Description = product.ProdDesc,
-                    Price = product.Price,
-                    Category = product.Category
-                };
-            }
-            else return null;
+            return _mapper.ParseProduct(prodToAdd);
         }
     }
 }

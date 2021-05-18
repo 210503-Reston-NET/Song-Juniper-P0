@@ -30,80 +30,132 @@ namespace StoreDL.Entities
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.CustName)
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CName)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasColumnName("cName");
             });
 
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.ToTable("Inventory");
 
-                entity.HasOne(d => d.Prod)
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ProductId).HasColumnName("productId");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.StoreId).HasColumnName("storeId");
+
+                entity.HasOne(d => d.Product)
                     .WithMany(p => p.Inventories)
-                    .HasForeignKey(d => d.ProdId)
-                    .HasConstraintName("FK__Inventory__ProdI__2CF2ADDF");
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Inventory__produ__45BE5BA9");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
-                    .HasConstraintName("FK__Inventory__Store__2BFE89A6");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Inventory__store__44CA3770");
             });
 
             modelBuilder.Entity<LineItem>(entity =>
             {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.OrderId).HasColumnName("orderId");
+
+                entity.Property(e => e.ProductId).HasColumnName("productId");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.LineItems)
                     .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK__LineItems__Order__282DF8C2");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__LineItems__order__4F47C5E3");
 
-                entity.HasOne(d => d.Prod)
+                entity.HasOne(d => d.Product)
                     .WithMany(p => p.LineItems)
-                    .HasForeignKey(d => d.ProdId)
-                    .HasConstraintName("FK__LineItems__ProdI__29221CFB");
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__LineItems__produ__503BEA1C");
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.DateCreated).HasColumnType("date");
+                entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.HasOne(d => d.Cust)
+                entity.Property(e => e.CustomerId).HasColumnName("customerId");
+
+                entity.Property(e => e.DateCreated)
+                    .HasColumnType("date")
+                    .HasColumnName("dateCreated");
+
+                entity.Property(e => e.Placed).HasColumnName("placed");
+
+                entity.Property(e => e.StoreId).HasColumnName("storeId");
+
+                entity.Property(e => e.Total).HasColumnName("total");
+
+                entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustId)
-                    .HasConstraintName("FK__Orders__CustId__245D67DE");
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Orders__customer__498EEC8D");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.StoreId)
-                    .HasConstraintName("FK__Orders__StoreId__25518C17");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Orders__storeId__4A8310C6");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.ProdDesc)
-                    .HasMaxLength(1000)
-                    .IsUnicode(false);
+                entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.ProdName)
+                entity.Property(e => e.Category)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("category");
+
+                entity.Property(e => e.PDesc)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("pDesc");
+
+                entity.Property(e => e.PName)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasColumnName("pName");
+
+                entity.Property(e => e.Price).HasColumnName("price");
             });
 
             modelBuilder.Entity<StoreFront>(entity =>
             {
-                entity.Property(e => e.Sfaddress)
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.SAddress)
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false)
-                    .HasColumnName("SFAddress");
+                    .HasColumnName("sAddress");
 
-                entity.Property(e => e.Sfname)
+                entity.Property(e => e.SName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("SFName");
+                    .HasColumnName("sName");
             });
 
             OnModelCreatingPartial(modelBuilder);
