@@ -31,5 +31,12 @@ namespace StoreTests
 
             Assert.Throws<Exception>(() => test.Name = input);
         }
+
+        [Fact]
+        public void NameShouldNotBeEmpty()
+        {
+            Customer test = new Customer();
+            Assert.Throws<Exception>(() => test.Name = "");
+        }
     }
 }
