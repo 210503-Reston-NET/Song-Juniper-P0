@@ -166,15 +166,18 @@ namespace StoreUI
 
             Inventory newInven = new Inventory (selectedProd, _currentLocation.Id, parsedInput);
 
-            try
+            using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
             {
-                _locBL.AddInventory(newInven);
-                Console.WriteLine("Inventory added successfully!");
-                Console.WriteLine(newInven.ToString());
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    _locBL.AddInventory(newInven);
+                    Console.WriteLine("Inventory added successfully!");
+                    Console.WriteLine(newInven.ToString());
+                }
+                catch(Exception ex)
+                {
+                    log.Warning(ex.Message);
+                }
             }
 
         }

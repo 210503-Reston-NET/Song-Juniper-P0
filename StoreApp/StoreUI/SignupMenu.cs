@@ -35,7 +35,7 @@ namespace StoreUI
                 }
                 catch (Exception ex)
                 {
-                    log.Information(ex, ex.Message);
+                    log.Warning(ex, ex.Message);
                     return AuthMenuFactory.GetMenu("signup").Start();
                 }
             }

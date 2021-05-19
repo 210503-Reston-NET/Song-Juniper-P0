@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Serilog;
 using StoreBL;
 using StoreModels;
 
@@ -100,41 +101,44 @@ namespace StoreUI
                 if(input == "y")
                 {
                     repeat = false;
-                    try
+                    using (var log = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().WriteTo.File("../logs/logs.txt", rollingInterval: RollingInterval.Day).CreateLogger())
                     {
-                        //first, close the order
-                        _openOrder.Closed = true;
-
-                        //and then, create the order
-                        int createdId = _orderBL.CreateOrder(_openOrder).Id;
-
-                        //Now we need to create line items associated to the order
-                        foreach(LineItem item in _openOrder.LineItems)
+                        try
                         {
-                            item.OrderId = createdId;
-                            _orderBL.CreateLineItem(item);
+                            //first, close the order
+                            _openOrder.Closed = true;
+
+                            //and then, create the order
+                            int createdId = _orderBL.CreateOrder(_openOrder).Id;
+
+                            //Now we need to create line items associated to the order
+                            foreach(LineItem item in _openOrder.LineItems)
+                            {
+                                item.OrderId = createdId;
+                                _orderBL.CreateLineItem(item);
+                            }
+
+                            //update the store's inventory after the successful placement of the order by getting all the inventory of the location of the order
+                            List<Inventory> allInventory =  _locationBL.GetLocationInventory(_currentLocation.Id);
+
+                            //and then update the inventory of the order and persist it to the DB 
+                            foreach(LineItem lineItem in _openOrder.LineItems)
+                            {
+                                Inventory boughtItem = allInventory.Find(invenItem => invenItem.Product.Id == lineItem.Product.Id);
+                                boughtItem.Quantity -= lineItem.Quantity;
+                                _locationBL.UpdateInventoryItem(boughtItem);
+                            }
+                            Console.WriteLine("Order placed successfully!");
+                            _openOrder = new Order {
+                                CustomerId = _currentCustomer.Id,
+                                LocationId = _currentLocation.Id,
+                                LineItems = new List<LineItem>()
+                            };
                         }
-
-                        //update the store's inventory after the successful placement of the order by getting all the inventory of the location of the order
-                        List<Inventory> allInventory =  _locationBL.GetLocationInventory(_currentLocation.Id);
-
-                        //and then update the inventory of the order and persist it to the DB 
-                        foreach(LineItem lineItem in _openOrder.LineItems)
+                        catch(Exception ex)
                         {
-                            Inventory boughtItem = allInventory.Find(invenItem => invenItem.Product.Id == lineItem.Product.Id);
-                            boughtItem.Quantity -= lineItem.Quantity;
-                            _locationBL.UpdateInventoryItem(boughtItem);
+                            log.Warning(ex.Message);
                         }
-                        Console.WriteLine("Order placed successfully!");
-                        _openOrder = new Order {
-                            CustomerId = _currentCustomer.Id,
-                            LocationId = _currentLocation.Id,
-                            LineItems = new List<LineItem>()
-                        };
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
                     }
                 }
                 else if (input == "n") {
