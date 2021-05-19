@@ -11,7 +11,6 @@ namespace StoreUI
         private ProductBL _productBL;
         private LocationBL _locationBL;
         private List<Location> _allLocations;
-        private List<Product> _allProducts;
         private List<Order> _ordersFromCustomer;
         private Customer _currentCustomer;
 

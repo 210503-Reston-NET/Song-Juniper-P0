@@ -8,16 +8,14 @@ namespace StoreUI
     public class BrowseMenu : IMenu
     {
         private LocationBL _locationBL;
-        private ProductBL _productBL;
         private OrderBL _orderBL;
         private Location _currentLocation;
         private Customer _currentCustomer;
         private Order _openOrder;
 
-        public BrowseMenu(LocationBL locationBL, ProductBL productBL, OrderBL orderBL)
+        public BrowseMenu(LocationBL locationBL, OrderBL orderBL)
         {
             _locationBL = locationBL;
-            _productBL = productBL;
             _orderBL = orderBL;
         }
         public void Start(Customer customer)
@@ -170,6 +168,8 @@ namespace StoreUI
                 }
                 string input = Console.ReadLine();
                 Product selectedProd = allInventory[Int32.Parse(input) - 1].Product;
+
+                //this is looking if the product they selected already exists in the open order
                 LineItem item = _openOrder.LineItems.Find(item => item.Product.Id == selectedProd.Id);
                 
                 Console.WriteLine("How many do you want?");
@@ -193,7 +193,8 @@ namespace StoreUI
                     };
                     _openOrder.LineItems.Add(item);
                     _openOrder.UpdateTotal();
-                    _openOrder.ToString();
+                    Console.WriteLine("Added successfully!");
+                    Console.WriteLine(_openOrder.ToString());
                 }
             }
         }

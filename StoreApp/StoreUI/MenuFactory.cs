@@ -34,7 +34,7 @@ namespace StoreUI
                     return new MainMenu();
 
                 case "browse":
-                    return new BrowseMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)), new OrderBL(new OrderRepoDB(context, mapper)));
+                    return new BrowseMenu(new LocationBL(new LocationRepoDB(context, mapper)), new OrderBL(new OrderRepoDB(context, mapper)));
 
                 case "admin":
                     return new AdminMenu();
@@ -46,7 +46,7 @@ namespace StoreUI
                     return new ProductMenu(new ProductBL(new ProductRepoDB(context, mapper)), new ValidationService());
                 
                 case "inventory":
-                    return new InventoryMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)));
+                    return new InventoryMenu(new LocationBL(new LocationRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)), new OrderBL(new OrderRepoDB(context, mapper)), new CustomerBL(new CustomerRepoDB(context, mapper)));
 
                 case "profile":
                     return new ProfileMenu(new OrderBL(new OrderRepoDB(context, mapper)), new ProductBL(new ProductRepoDB(context, mapper)), new LocationBL(new LocationRepoDB(context, mapper)));

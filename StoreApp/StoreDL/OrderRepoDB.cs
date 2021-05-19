@@ -37,6 +37,15 @@ namespace StoreDL
             .ToList();
         }
 
+        public List<Model.Order> GetOrdersByLocationId(int locationId)
+        {
+            return _context.Orders
+            .AsNoTracking()
+            .Where(order => order.StoreId == locationId)
+            .Select(order => _mapper.ParseOrder(order))
+            .ToList();
+        }
+
         public List<Model.LineItem> GetLineItemsByOrderId(int orderId)
         {
             return _context.LineItems
@@ -108,6 +117,7 @@ namespace StoreDL
             _context.SaveChanges();
             _context.ChangeTracker.Clear();
             return _mapper.ParseOrder(added);
+            
         }
 
         

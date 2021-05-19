@@ -11,11 +11,16 @@ namespace StoreUI
         private Location _currentLocation;
         private LocationBL _locBL;
         private ProductBL _prodBL;
+        private OrderBL _orderBL;
 
-        public InventoryMenu(LocationBL locBL, ProductBL prodBL)
+        private CustomerBL _customerBL;
+
+        public InventoryMenu(LocationBL locBL, ProductBL prodBL, OrderBL orderBL, CustomerBL customerBL)
         {
             _locBL = locBL;
             _prodBL = prodBL;
+            _orderBL = orderBL;
+            _customerBL = customerBL;
         }
         public void Start(Customer customer)
         {
@@ -24,7 +29,7 @@ namespace StoreUI
             int parsedInput = 0;
             do
             {
-                Console.WriteLine("This is Manage Inventory Menu.");
+                Console.WriteLine("This is Manage a Location Menu.");
                 if (_currentLocation is null)
                 {
                     Console.WriteLine("Please select a store location to begin");
@@ -45,6 +50,58 @@ namespace StoreUI
                         Console.WriteLine("Invalid selection");
                     }
                 }
+                Console.WriteLine("What would you like to do?");
+                Console.WriteLine("[0] Go back");
+                Console.WriteLine("[1] Manage Inventory");
+                Console.WriteLine("[2] View Order History");
+                
+                input = Console.ReadLine();
+                switch(input)
+                {
+                    case "0":
+                        repeat = false;
+                    break;
+                    
+                    case "1":
+                        ManageInventory();
+                    break;
+
+                    case "2":
+                        ViewLocationOrders();
+                    break;
+
+                    default:
+                        Console.WriteLine("I don't understand your input, please try again.");
+                    break;
+
+                }
+
+            } while(repeat);
+            
+            
+            
+        }
+
+        private void ViewLocationOrders()
+        {
+            List<Order> allOrders = _orderBL.GetOrdersByLocationId(_currentLocation.Id);
+            List<Customer> allCustomers = _customerBL.GetAllCustomers();
+            Customer orderCustomer;
+            foreach(Order order in allOrders)
+            {
+                order.LineItems = _orderBL.GetLineItemsByOrderId(order.Id);
+                orderCustomer = allCustomers.Find(customer => customer.Id == order.CustomerId);
+                Console.WriteLine($"Customer: \n{orderCustomer.ToString()} \nOrder Detail: \n{order.ToString()} \n\n");
+            }
+        }
+
+        private void ManageInventory()
+        {
+            bool repeat = true;
+            string input;
+            int parsedInput = 0;
+            do
+            {
                 List<Inventory> inventory = GetAllInventory(_currentLocation.Id);
                 if(inventory.Count == 0)
                 {
@@ -88,11 +145,7 @@ namespace StoreUI
                         AddNewProductToInventory();
                     }
                 }
-
             } while(repeat);
-            
-            
-            
         }
 
         private void AddNewProductToInventory()

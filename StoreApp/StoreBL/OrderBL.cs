@@ -52,5 +52,10 @@ namespace StoreBL
         {
             return _repo.CreateLineItem(item);
         }
+
+        public List<Order> GetOrdersByLocationId(int locationId)
+        {
+            return _repo.GetOrdersByLocationId(locationId);
+        }
     }
 }

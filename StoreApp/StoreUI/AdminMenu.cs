@@ -31,7 +31,6 @@ namespace StoreUI
                 Console.WriteLine("What would you like to do today?");
                 Console.WriteLine("[1] Manage Locations");
                 Console.WriteLine("[2] Manage Products");
-                Console.WriteLine("[3] Manage Inventory");
                 Console.WriteLine("[0] Go Back to the Main Menu");
 
                 string input = Console.ReadLine();
@@ -47,10 +46,6 @@ namespace StoreUI
 
                     case "2":
                         MenuFactory.GetMenu("product").Start(_currentCustomer);
-                    break;
-
-                    case "3":
-                        MenuFactory.GetMenu("inventory").Start(_currentCustomer);
                     break;
 
                     default:

@@ -24,7 +24,8 @@ namespace StoreUI
                 Console.WriteLine("This is Manage Locations Menu");
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[1] View All Locations");
-                Console.WriteLine("[2] Create a New Location");
+                Console.WriteLine("[2] Manage an Existing Location");
+                Console.WriteLine("[3] Create a New Location");
                 Console.WriteLine("[0] Go Back");
                 string input = Console.ReadLine();
                 switch(input)
@@ -38,6 +39,10 @@ namespace StoreUI
                     break;
 
                     case "2":
+                        MenuFactory.GetMenu("inventory").Start(customer);
+                    break;
+
+                    case "3":
                         AddNewLocation();
                     break;
 
@@ -87,27 +92,5 @@ namespace StoreUI
                 }
             }
         }
-
-        // public void RemoveLocation()
-        // {
-        //     try
-        //     {
-        //         Console.WriteLine("What is the name of the location you wish to remove?");
-        //         string name = Console.ReadLine();
-        //         Location loc = _locBL.FindLocationByName(name);
-        //         Console.WriteLine("Is this the location you're looking to remove? [Y/N]");
-        //         Console.WriteLine(loc.ToString());
-        //         string input = Console.ReadLine();
-        //         if(input == "y" | input == "Y")
-        //         {
-        //             _locBL.RemoveLocation(loc);
-        //             Console.WriteLine("Successfully Removed!");
-        //         }
-        //     }
-        //     catch(Exception ex)
-        //     {
-        //         Console.WriteLine(ex.Message);
-        //     }
-        // }
     }
 }
